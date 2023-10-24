@@ -40,8 +40,11 @@ class Loader extends Container {
     async loadBundle(name: string, callback: ProgressCallback) {
 
         try {
-            const asset = await Assets.loadBundle(name, callback);
-            this.$emitAndStop(`${name}_loaded`, asset);
+            const assets = await Assets.loadBundle(name, callback);
+            for (let key in assets) {
+                this.$emitAndStop(`${key}_loaded`, assets[key])
+            }
+
         } catch (e) {
             this.$emit(`asset_failed`, name);
             console.error(e)
