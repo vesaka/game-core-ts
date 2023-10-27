@@ -118,3 +118,9 @@ declare type BundleConfig = {
     name: string;
     assets: ArrayOr<any>;
 }
+
+declare type KeyAttributeConfig = {
+    key: string;
+    [key: string]: any;
+    [key: number]: any;
+}
