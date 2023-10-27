@@ -16,6 +16,7 @@ class Loader extends Container {
 
     async load() {
         const { options } = this;
+        this.$emitAndStop('game_loading');
         await Assets.init(options);
 
         const firstBundleId = options.manifest.bundles[0].name;
