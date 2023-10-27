@@ -21,7 +21,7 @@ declare type AuthUser = {
     data?: AnyObject;
 }
 
-declare type Collection = {
+declare type CollectionDefTypes = {
     def: {
         [key: string]: any;
     },
@@ -124,3 +124,9 @@ declare type KeyAttributeConfig = {
     [key: string]: any;
     [key: number]: any;
 }
+
+declare type CollectionOptions = {
+    items: KeyAttributeConfig[];
+    catalogue?: any;
+    collection: CollectionDefTypes;
+} | KeyAttributeConfig[];
