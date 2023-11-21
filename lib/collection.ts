@@ -3,13 +3,45 @@ import { extend } from '@/core/utils/object.util';
 
 class Collection extends Container implements CollectionInterface {
 
-    protected items: any[] = [];
+    protected items: KeyAttributeConfig[] = [];
 
-    protected catalogue: any = {};    
+    protected catalogue: any = {}; 
 
-    constructor(items: any[] = []) {
+    protected name: string = 'collection';
+
+    protected def: { [key: string]: any } = {};
+
+    protected types: { [key: string]: any } = {};
+    
+    protected collection: CollectionDefTypes = {
+        def: {},
+        types: {}
+    };
+
+
+    constructor(options: CollectionOptions) {
         super();
-        this.items = items;
+
+
+        if (Array.isArray(options)) {
+            this.items = options;
+        } else {
+            this.name = options.key;
+            this.items = Array.isArray(options.items) ? options.items : [];
+
+            if (options.def) {
+                this.def = options.def;
+            }
+
+            if (options.types) {
+                this.types = options.types;
+            }
+
+            if (options.catalogue) {
+                this.catalogue = options.catalogue;
+            }
+            
+        }
     }
 
     setCatalogue(catalogue: any): this {
@@ -17,8 +49,8 @@ class Collection extends Container implements CollectionInterface {
         return this;
     }
 
-    buildItems(collection: UiCollection) {
-        const { def, types } = collection;
+    buildItems() {
+        const { def, types } = this;
         const items: any[] = [];
 
         for (let key in types) {
@@ -31,10 +63,16 @@ class Collection extends Container implements CollectionInterface {
 
     }
 
-    buildItem(options: any) {
+    buildItem(options: any): any {
         const { catalogue } = this;
         const itemClass = catalogue[options.key] || catalogue[Object.keys(catalogue)[0]];
         return new itemClass(options);        
+    }
+
+    addItem(options: KeyAttributeConfig): any {
+        const item = this.buildItem(extend(this.def, options));
+        this.items.push(item);
+        return item;
     }
 
     all() {
@@ -62,8 +100,12 @@ class Collection extends Container implements CollectionInterface {
         return this;
     }
 
-    get(key = 0): any {
-        return this.items[key];
+    get(key: number | string = 0): any {
+        if (typeof key === 'number') {
+            return this.items[key];
+        }
+
+        return this.first((item: KeyAttributeConfig) => item.key === key);
     }
 
     remove(at: number) {
@@ -142,7 +184,7 @@ class Collection extends Container implements CollectionInterface {
             return null;
         }
         
-        let min: number, callback;
+        let min: number = 10000, callback: Function = () => true;
         
         if (['string', 'number'].includes(typeof property)) {
             min = this.items[0][property];
@@ -154,13 +196,6 @@ class Collection extends Container implements CollectionInterface {
         } else if (typeof property === 'function') {
             min = property(this.items[0]);
             callback = property;
-        } else {
-            min = this.items[0];
-            callback = (item: any) => {
-                if (min > item) {
-                    min = item;
-                }
-            };
         }
         
         this.each(callback);
@@ -173,7 +208,7 @@ class Collection extends Container implements CollectionInterface {
             return null;
         }
         
-        let max: number, callback: Function;
+        let max: number = 0, callback: Function = () => true;
         
         if (['string', 'number'].includes(typeof property)) {
             max = this.items[0][property];
@@ -185,13 +220,6 @@ class Collection extends Container implements CollectionInterface {
         } else if (typeof property === 'function') {
             max = property(this.items[0]);
             callback = property;
-        } else {
-            max = this.items[0];
-            callback = (item: any) => {
-                if (max < item) {
-                    max = item;
-                }
-            };
         }
         
         this.each(callback);
