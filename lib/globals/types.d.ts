@@ -126,7 +126,7 @@ declare type KeyAttributeConfig = {
 }
 
 declare type CollectionOptions = {
+    key: string;
     items: KeyAttributeConfig[];
     catalogue?: any;
-    collection: CollectionDefTypes;
-} | KeyAttributeConfig[];
+} & CollectionDefTypes | KeyAttributeConfig[];
