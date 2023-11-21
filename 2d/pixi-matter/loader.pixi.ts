@@ -1,4 +1,4 @@
-import { Assets, ArrayOr, AssetInitOptions, ProgressCallback } from 'pixi.js';
+import { Assets, ArrayOr, AssetInitOptions, ProgressCallback,AssetsBundle } from 'pixi.js';
 import Container from '@/core/container';
 
 class Loader extends Container {
@@ -16,16 +16,21 @@ class Loader extends Container {
 
     async load() {
         const { options } = this;
+        const { bundles } = options.manifest;
+
         this.$emitAndStop('game_loading');
+
         await Assets.init(options);
 
-        const firstBundleId = options.manifest.bundles[0].name;
+        const [ firstBundle, ...restBundles ] = bundles;
 
-        await Assets.backgroundLoadBundle(firstBundleId);
-        await this.loadBundle(firstBundleId, () => {
-            this.$emit.bind(this, 'assets_loading');
-        
+        await this.loadBundle(firstBundle, (progress: number) => {
+            this.$emit('assets_loading', progress);
         });
+
+        for(const bundle of restBundles) {
+            Assets.backgroundLoadBundle(bundle.name);
+        }
 
         this.$emitAndStop('game_loaded');
     }
@@ -34,23 +39,38 @@ class Loader extends Container {
         return Assets.add(url);
     }
 
+    get(name: string) {
+        return Assets.get(name);
+    }
+
     addBundle(name: string, bundle: ArrayOr<any>,) {
         return Assets.addBundle(name, bundle);
     }
 
-    async loadBundle(name: string, callback: ProgressCallback) {
-
+    async loadBundle(bundle: AssetsBundle, callback: ProgressCallback) {
         try {
-            const assets = await Assets.loadBundle(name, callback);
+            const assets = await Assets.loadBundle(bundle.name, callback);
+
             for (let key in assets) {
-                this.$emitAndStop(`${key}_loaded`, assets[key])
+                this.$emitAndStop(`loaded_${key}`, assets[key])
             }
 
         } catch (e) {
-            this.$emit(`asset_failed`, name);
+            this.$emit(`asset_failed`, bundle.name);
             console.error(e)
         }
 
+    }
+
+    async backgroundLoadBundle(name: string) {
+
+    }
+
+    async loadAsset(name: string) {
+        const asset = await Assets.load(name);
+        if (asset) {
+            this.$emit(`loaded_${name}`, asset);
+        }
     }
 
 }
