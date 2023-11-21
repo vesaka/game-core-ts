@@ -27,24 +27,24 @@ class GamePixiMatter extends Game2D {
         const app = new Application(Object.assign({}, {
             width: this.options.world.size.width,
             height: this.options.world.size.height,
-            //resizeTo: window,
-            resolution: Math.min(window.devicePixelRatio || 1, 2)
+            resolution: Math.min(window.devicePixelRatio || 1, 2),
+            backgroundColor: 0x101010,
         }, this.options.app));
 
 
         this.$set('app', app);
         this.$set('layers', {});
         this.$set('scene', new PixiContainer());
+        this.$set('loader', new PixiLoader(this.assets));
 
-
+        this.app.stage.addChild(this.scene); // Add the scene container to the app stage
         this.container?.appendChild(this.app.view);
 
         return this;
     }
 
     async loadAssets() {
-        const loader = new PixiLoader(this.assets);
-        await loader.load()
+        await this.loader.load()
     }
     createModels(): this {
         return this;
@@ -54,8 +54,8 @@ class GamePixiMatter extends Game2D {
         this.layers.ui = new PixiContainer;
         this.scene.addChild(this.layers.ui);
 
-        const uiCollection = new UI();
-        uiCollection.buildItems(this.options.ui);
+        const uiCollection = new UI(this.options.ui as CollectionOptions);
+        uiCollection.buildItems();
         this.$set('ui', uiCollection);
         return this;
     }
@@ -63,6 +63,7 @@ class GamePixiMatter extends Game2D {
     onResize(): void {
 
     }
+    
     createWorld(): this {
         this.$set('engine', Engine.create(this.options.engine));
 
