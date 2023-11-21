@@ -1,6 +1,5 @@
 import { PixiMatterGroup } from "./2d/pixi-matter/interfaces.pm";
 import Container from "./container";
-import Factory from "@/core/lib/patterns/creation/factory";
 
 abstract class Game extends Container {
     
@@ -54,16 +53,9 @@ abstract class Game extends Container {
         this.game.destroy();
     }
 
-    createItems(collection: Collection, catalogue: any): any {
-        const factory = new Factory(collection, catalogue);
-        return factory.createItems();
-    }
-
     protected onResize(): void {
         this.$emit('window_resize', this);
     }
-
-    
 
 }
 
