@@ -49,6 +49,16 @@ class Container {
         }
     }
 
+    applyFilters(options: AnyObject) {
+        let filterMethod;
+        for (let attribute in options) {
+            filterMethod = `filter_${attribute}`;
+            if (typeof this[filterMethod] === 'function') {
+                this[attribute] = this[filterMethod](options[attribute]);
+            }
+        }
+    }
+
     $on(tag: string, callback: Function) {
         Action.on(tag, callback);
     }
