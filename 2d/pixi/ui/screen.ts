@@ -2,6 +2,7 @@ import UI from "@/core/2d/pixi/ui/ui";
 import { Container, EventMode } from "pixi.js";
 import Button from "./button";
 import Label from "./label";
+import ModelCollection from "../collections/model.collection";
 
 class Screen extends UI {
     
@@ -14,9 +15,11 @@ class Screen extends UI {
 
     protected labels: { [key: string]: Label } = {};
 
+    protected models?: ModelInterface;
+
     constructor(options: AnyObject = {}) {
         super(options);
-        
+        console.log({options});
         this.view = new Container();
         this.scene.addChild(this.view);
     }
@@ -26,6 +29,8 @@ class Screen extends UI {
     }
 
     build() {}
+
+    destroy() {}
 
     show(mode: EventMode = 'auto') {        
         this.view.eventMode = mode;
@@ -46,6 +51,20 @@ class Screen extends UI {
 
     disable(mode: EventMode = 'none') {
         this.view.eventMode = mode;
+    }
+
+    loadModels(...keys: []) {
+        for (let key of keys) {
+            this.loadModel(key);
+        }
+    }
+
+    loadModel(key: string) {
+        
+    }
+
+    addChild() {
+
     }
 
     
