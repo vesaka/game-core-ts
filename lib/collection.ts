@@ -19,13 +19,17 @@ class Collection extends Container implements CollectionInterface {
     };
 
 
-    constructor(options: CollectionOptions) {
+    constructor(options?: CollectionOptions) {
         super();
 
+        this.setup(options);
+        
+    }
 
+    setup(options?: CollectionOptions) {
         if (Array.isArray(options)) {
             this.items = options;
-        } else {
+        } else if (options) {
             this.name = options.key;
             this.items = Array.isArray(options.items) ? options.items : [];
 
