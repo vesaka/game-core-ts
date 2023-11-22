@@ -2,11 +2,9 @@ import UI from "@/core/2d/pixi/ui/ui";
 import { Container, EventMode } from "pixi.js";
 import Button from "./button";
 import Label from "./label";
-import ModelCollection from "../collections/model.collection";
 
 class Screen extends UI {
     
-
     protected view: Container;
 
     protected layers: { [key: string]: Container } = {};
@@ -19,7 +17,7 @@ class Screen extends UI {
 
     constructor(options: AnyObject = {}) {
         super(options);
-        console.log({options});
+        
         this.view = new Container();
         this.scene.addChild(this.view);
     }
