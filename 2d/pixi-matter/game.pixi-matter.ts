@@ -3,7 +3,7 @@ import { Application, Container as PixiContainer } from 'pixi.js';
 import { Engine, Runner, Composite } from 'matter-js';
 import { PixiMatterGroup, PixiMatterModel } from './interfaces.pm';
 import PixiLoader from './loader.pixi';
-import UI from '@/game/collections/ui.collection';
+
 
 class GamePixiMatter extends Game2D {
 
@@ -11,6 +11,10 @@ class GamePixiMatter extends Game2D {
 
     constructor(options: GameOptions) {
         super(options);
+
+        this.$listen({
+            model: ['created', 'destroyed']
+        });
     }
 
     load(): this {
@@ -51,12 +55,6 @@ class GamePixiMatter extends Game2D {
     }
 
     createUi(): this {
-        this.layers.ui = new PixiContainer;
-        this.scene.addChild(this.layers.ui);
-
-        const uiCollection = new UI(this.options.ui as CollectionOptions);
-        uiCollection.buildItems();
-        this.$set('ui', uiCollection);
         return this;
     }
 
@@ -115,6 +113,10 @@ class GamePixiMatter extends Game2D {
         for (let key in group.components) {
             this.remove(group.components[key], layer);
         }
+    }
+
+    model_created(model: PixiMatterModel, layer = undefined): void {
+        this.add(model, layer);
     }
 }
 
