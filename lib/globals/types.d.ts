@@ -114,6 +114,13 @@ declare type PixiLoaderOptions = {
     manifest: PixiManifest | string;
 }
 
+declare type PixiGraphicsOptions = {
+    fill?: number | string;
+    color?: number | string;
+    line: LineStyle;
+    style: TextStyle;
+}
+
 declare type BundleConfig = {
     name: string;
     assets: ArrayOr<any>;
