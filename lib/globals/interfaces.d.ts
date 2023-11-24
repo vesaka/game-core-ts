@@ -45,4 +45,6 @@ declare interface CollectionInterface {
     remove(at: number): this;
     find(condition: Function): any;
     first(condition: Function): any;
+    create(...names: string[]): void;
+    destroy(...names: string[]): void;
 }

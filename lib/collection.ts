@@ -284,6 +284,14 @@ class Collection extends Container implements CollectionInterface {
     slice(start = 0, end = 0) {
         return new Collection(this.items.slice(start, end));
     }
+
+    create(...names: string[]) {
+        console.log('create', names);
+    }
+
+    destroy(...names: string[]): void {
+        console.log('destroy', names);
+    }
 }
 ;
 
