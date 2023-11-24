@@ -55,6 +55,8 @@ class Container {
             filterMethod = `filter_${attribute}`;
             if (typeof this[filterMethod] === 'function') {
                 this[attribute] = this[filterMethod](options[attribute]);
+            } else {
+                this[attribute] = options[attribute];
             }
         }
     }
