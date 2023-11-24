@@ -13,7 +13,7 @@ class Screen extends UI {
 
     protected labels: { [key: string]: Label } = {};
 
-    protected models?: ModelInterface;
+    protected models?: CollectionInterface;
 
     constructor(options: AnyObject = {}) {
         super(options);
