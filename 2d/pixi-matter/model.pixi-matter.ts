@@ -3,6 +3,9 @@ import { DisplayObject, LineStyle } from "pixi.js";
 import { Body } from "matter-js";
 import { snakeCase } from "@/core/utils/string.util";
 import { hex2dec, colorToHex } from "@/core/utils/colors.util";
+import { between } from "@/core/utils/math.util";
+
+const ARRAY_ATTRIBUTES = ['axes', 'vertices', 'parts', ];
 
 class Model extends Container implements ModelInterface {
 
@@ -16,6 +19,9 @@ class Model extends Container implements ModelInterface {
         this.applyFilters(options);
         this.body = this.createBody();
         this.model = this.createModel();
+
+        
+
     }
 
     get name(): string {
@@ -38,8 +44,8 @@ class Model extends Container implements ModelInterface {
 
     filter_size(size: Size2D): Size2D {
         const { screen } = this.app;
-
-        for (let key in ['width', 'height']) {
+        
+        for (const key of ['width', 'height']) {
             const attribute = key as keyof Size2D;
             if (size.hasOwnProperty(attribute) && size[attribute] >= 0 && size[attribute] <= 1) {
                 size[attribute] *= screen[attribute];
@@ -95,6 +101,85 @@ class Model extends Container implements ModelInterface {
     createMaterial() {
         throw new Error("Method not implemented.");
     } 
+
+    game_ready() {
+        this.$listen({
+            'game': ['render']
+        });
+    }
+
+    setX(x: number): this {
+        Body.setPosition(this.body, { x, y: this.body.position.y });
+        this.model.x = x;
+        return this;
+    }
+
+    setY(y: number): this {
+        Body.setPosition(this.body, { x: this.body.position.x, y });
+        this.model.y = y;
+        return this;
+    }
+
+    increaseX(x: number): this {
+        Body.setPosition(this.body, { x: this.body.position.x + x, y: this.body.position.y });
+        this.model.x += x;
+        return this;
+    }
+
+    increaseY(y: number): this {
+        Body.setPosition(this.body, { x: this.body.position.x, y: this.body.position.y + y });
+        this.model.y += y;
+        return this;
+    }
+
+    rotate(angle: number) {
+        Body.setAngle(this.body, angle);
+        this.model.rotation = angle;
+        return this;
+    }
+
+    setAngle(angle: number): this {
+        this.body.angle = angle;
+        this.model.angle = angle;
+        return this;
+    }
+
+    update(): this {
+        this.model.rotation = this.body.angle;
+        this.updatePosition();
+        return this;
+    }
+
+    updatePosition(): this {
+        this.model.position.x = this.body.position.x;
+        this.model.position.y = this.body.position.y;
+        return this;
+    }
+
+    updateRotation(): this {
+        this.model.angle = this.body.angle;
+        return this;
+    }
+
+    filter_matter(body = {}) {
+        const matter: any = Object.assign({}, body);
+        if (typeof matter === 'object') {
+            let key: keyof any;
+            for (key in matter) {
+                if (ARRAY_ATTRIBUTES.includes(key)) {
+                    continue;
+                }
+
+                if (Array.isArray(matter[key]) && matter[key].length === 2) {
+                    matter[key] = between(matter[key][0], matter[key][1]);
+                }
+            }
+        }
+
+        return matter;
+    }
+
+
 
 }
 
