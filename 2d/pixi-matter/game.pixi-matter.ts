@@ -24,9 +24,7 @@ class GamePixiMatter extends Game2D {
 
         return this;
     }
-    loader_complete(): void {
-        throw new Error('Method not implemented.');
-    }
+
     createApplication(): this {
         const app = new Application(Object.assign({}, {
             width: this.options.world.size.width,
@@ -56,6 +54,15 @@ class GamePixiMatter extends Game2D {
 
     createUi(): this {
         return this;
+    }
+
+    run(): void {
+        this.app.ticker.add((delta: number) => {
+            if (this.paused) {
+                return;        
+            }
+            this.$emit('game_render', delta);
+        });
     }
 
     onResize(): void {
