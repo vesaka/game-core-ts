@@ -5,6 +5,8 @@ abstract class Game extends Container {
     
     protected loaded: boolean;
 
+    protected paused: boolean = false;
+
     container: HTMLElement;
 
     constructor(options: GameOptions) {
@@ -24,6 +26,8 @@ abstract class Game extends Container {
         this.$listen({
             'game': ['loaded', 'ready', 'destroy']
         })
+
+        this.$emit('game_ready', this);
 
     }
 
@@ -46,6 +50,8 @@ abstract class Game extends Container {
     abstract removeGroup(group: PixiMatterGroup, layer?: string): void;
 
     abstract load(): this;
+
+    abstract run(): void;
 
     game_destroy(): void {
         window.removeEventListener('orientationchange', this.onResize.bind(this));
