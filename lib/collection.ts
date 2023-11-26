@@ -1,9 +1,9 @@
 import Container from '@/core/container';
-import { extend } from '@/core/utils/object.util';
+import { extend, raw } from '@/core/utils/object.util';
 
 class Collection extends Container implements CollectionInterface {
 
-    protected items: KeyAttributeConfig[] = [];
+    protected items: any[] = [];
 
     protected catalogue: any = {}; 
 
@@ -74,7 +74,7 @@ class Collection extends Container implements CollectionInterface {
     }
 
     addItem(options: KeyAttributeConfig): any {
-        const item = this.buildItem(extend(this.def, options));
+        const item = this.buildItem(extend(this.def, raw(options)));
         this.items.push(item);
         return item;
     }
