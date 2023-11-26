@@ -1,4 +1,5 @@
 import Collection from "@/core/lib/collection";
+import { raw } from "@/core/utils/object.util";
 
 class ModelCollection extends Collection {
 
@@ -15,8 +16,9 @@ class ModelCollection extends Collection {
         const { types } = this;
         for (let name of names) {
             if (types[name]) {
-                types[name].key = name;
-                const model = this.addItem(types[name]);
+                const options = raw(types[name]);
+                options.key = name;
+                const model = this.addItem(options);
                 this.$emit('model_created', model);
             }
         }
