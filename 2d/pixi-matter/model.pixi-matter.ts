@@ -1,6 +1,6 @@
 import Container from "@/core/container";
-import { DisplayObject, LineStyle } from "pixi.js";
-import { Body } from "matter-js";
+import { DisplayObject } from "pixi.js";
+import { Body, Composite } from "matter-js";
 import { snakeCase } from "@/core/utils/string.util";
 import { hex2dec, colorToHex } from "@/core/utils/colors.util";
 import { between } from "@/core/utils/math.util";
@@ -17,8 +17,10 @@ class Model extends Container implements ModelInterface {
         this._name = snakeCase(this.constructor.name);
         
         this.applyFilters(options);
-        this.body = this.createBody();
         this.model = this.createModel();
+        this.body = this.createBody();
+       
+        this.game_ready();
     }
 
     get name(): string {
@@ -89,7 +91,7 @@ class Model extends Container implements ModelInterface {
         return num;
     }
 
-    createBody(): Body {
+    createBody(): Body | Composite {
         throw new Error("Method not implemented.");
     }
     createModel(): DisplayObject {
@@ -174,6 +176,10 @@ class Model extends Container implements ModelInterface {
         }
 
         return matter;
+    }
+
+    game_render() {
+        this.update();
     }
 
 
