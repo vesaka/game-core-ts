@@ -13,6 +13,11 @@ class Screen extends Container {
             screen: ['active', 'inactive']
         })
     }
+
+    run() {
+        this.active = true;
+        this.$emit('screen_active', this);
+    }
 }
 
 export default Screen;
