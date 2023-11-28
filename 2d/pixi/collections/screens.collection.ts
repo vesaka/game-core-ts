@@ -2,7 +2,6 @@ import Collection from "@/core/lib/collection";
 import { raw } from "@/core/utils/object.util";
 import Screen from "../ui/screen";
 
-
 class ScreensCollection extends Collection {
 
     constructor(options: CollectionOptions) {
@@ -42,15 +41,7 @@ class ScreensCollection extends Collection {
 
     select(key: string) {
         let screen: Screen = this.loadScreen(key);
-
-        this.map((item: Screen) => {
-            if (key !== item.key) {
-                item.hide();
-            }
-        });
-
         screen.show();
-        
     }
 
 }
