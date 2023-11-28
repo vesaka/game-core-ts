@@ -6,7 +6,7 @@ class Factory {
 
     protected catalogue: any = {};
 
-    constructor(collection: Collection, catalogue: any) {
+    constructor(collection: CollectionInterface, catalogue: any) {
         this.collection = collection;
         this.catalogue = catalogue;
     }
