@@ -19,9 +19,6 @@ class Model extends Container implements ModelInterface {
         this.applyFilters(options);
         this.body = this.createBody();
         this.model = this.createModel();
-
-        
-
     }
 
     get name(): string {
