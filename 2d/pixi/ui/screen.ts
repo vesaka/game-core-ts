@@ -20,23 +20,29 @@ class Screen extends UI {
         
         this.view = new Container();
         this.scene.addChild(this.view);
+
+        this.$listen({
+            screen: ['show', 'shown', 'hide', 'hidden']
+        })
     }
 
     get active(): boolean {
-        return this.view.visible;
+        return this.view.visible && this.view.eventMode !== 'none';
     }
 
     build() {}
 
     destroy() {}
 
-    show(mode: EventMode = 'auto') {        
+    show(mode: EventMode = 'auto') {
+        this.$emit('screen_show', this);        
         this.view.eventMode = mode;
         this.view.visible = true;
         this.$emit('screen_shown', this);
     }
 
     hide(mode: EventMode = 'none') {
+        this.$emit('screen_hide', this);
         this.view.eventMode = mode;
         this.view.visible = false;
 
@@ -65,7 +71,11 @@ class Screen extends UI {
 
     }
 
-    
+    screen_show(screen: Screen) {
+        if (screen !== this) {
+            this.hide();
+        }
+    }    
 
 
 }
