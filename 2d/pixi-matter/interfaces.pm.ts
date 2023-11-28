@@ -1,15 +1,15 @@
 import { Graphics } from "pixi.js";
-import { Body } from "matter-js";
+import { Body, Composite } from "matter-js";
 
 
 export interface PixiMatterModel extends ModelInterface {
+    name: string;
     model: Graphics;
     body: Body
 }
 
 export interface PixiMatterGroup {
-    components: {
-        [key: string]: PixiMatterModel
-    },
-    constraints: any
+    name: string;
+    model: Graphics;
+    body: Composite;
 }
