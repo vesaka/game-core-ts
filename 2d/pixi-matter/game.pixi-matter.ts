@@ -1,13 +1,16 @@
 import Game2D from '@/core/game';
 import { Application, Container as PixiContainer } from 'pixi.js';
-import { Engine, Runner, Composite } from 'matter-js';
+import { Engine, Runner, Composite, World } from 'matter-js';
 import { PixiMatterGroup, PixiMatterModel } from './interfaces.pm';
 import PixiLoader from './loader.pixi';
+import Screen from './screen.pixi-matter';
 
 
 class GamePixiMatter extends Game2D {
 
     loaded: boolean = false;
+
+    screen?: Screen;
 
     constructor(options: GameOptions) {
         super(options);
@@ -57,12 +60,7 @@ class GamePixiMatter extends Game2D {
     }
 
     run(): void {
-        this.app.ticker.add((delta: number) => {
-            if (this.paused) {
-                return;        
-            }
-            this.$emit('game_render', delta);
-        });
+        this.screen?.run();
     }
 
     onResize(): void {
@@ -70,7 +68,11 @@ class GamePixiMatter extends Game2D {
     }
     
     createWorld(): this {
-        this.$set('engine', Engine.create(this.options.engine));
+        const { world } = this.options;
+        this.$set('engine', Engine.create({
+            world: Composite.create(world.engine || {}) as World,
+            gravity: world.engine.gravity || { x: 0, y: 0 }
+        }));
 
         if (!this.runner) {
             this.$set('runner', Runner.create());
@@ -105,20 +107,6 @@ class GamePixiMatter extends Game2D {
             this.layers[layer].removeChild(object.model);
         } else {
             this.scene.removeChild(object.model);
-        }
-    }
-
-    addGroup(group: PixiMatterGroup, layer?: string): void {
-        for (let key in group.components) {
-            this.add(group.components[key], layer);
-        }
-
-        Composite.add(this.engine.world, group.constraints);
-    }
-
-    removeGroup(group: PixiMatterGroup, layer?: string): void {
-        for (let key in group.components) {
-            this.remove(group.components[key], layer);
         }
     }
 
