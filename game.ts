@@ -45,10 +45,6 @@ abstract class Game extends Container {
 
     abstract remove(object: ModelInterface, layer?: string): void;
 
-    abstract addGroup(group: PixiMatterGroup, layer?: string): void;
-
-    abstract removeGroup(group: PixiMatterGroup, layer?: string): void;
-
     abstract load(): this;
 
     abstract run(): void;
