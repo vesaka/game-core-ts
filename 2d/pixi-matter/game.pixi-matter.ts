@@ -1,7 +1,7 @@
 import Game2D from '@/core/game';
 import { Application, Container as PixiContainer } from 'pixi.js';
 import { Engine, Runner, Composite, World } from 'matter-js';
-import { PixiMatterGroup, PixiMatterModel } from './interfaces.pm';
+import { PixiMatterModel } from './interfaces.pm';
 import PixiLoader from './loader.pixi';
 import Screen from './screen.pixi-matter';
 
