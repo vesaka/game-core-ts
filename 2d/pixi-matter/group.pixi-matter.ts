@@ -1,5 +1,5 @@
 import Model from "@/core/2d/pixi-matter/model.pixi-matter";
-import { Composite } from "matter-js";
+import { Composite, Bounds } from "matter-js";
 import { DisplayObject, Graphics } from "pixi.js";
 
 class Group extends Model {
@@ -43,8 +43,16 @@ class Group extends Model {
         return this;
     }
 
+    getPosition(): Vector2D {
+        const bounds = this.bounds();
+        return {
+            x: (bounds.min.x + bounds.max.x) * 0.5,
+            y: (bounds.min.y + bounds.max.y) * 0.5
+        };
+    }
+
     updatePosition(): this {
-        const bounds = Composite.bounds(this.body);
+        const bounds = this.bounds();
         this.model.position.set(
             (bounds.min.x + bounds.max.x) * 0.5,
             (bounds.min.y + bounds.max.y) * 0.5
@@ -52,6 +60,18 @@ class Group extends Model {
 
         return this;
     } 
+
+    bounds(): Bounds {
+        var bodies = Composite.allBodies(this.body),
+            vertices = [];
+
+        for (var i = 0; i < bodies.length; i += 1) {
+            var body = bodies[i];
+            vertices.push(body.bounds.min, body.bounds.max);
+        }
+
+        return Bounds.create(vertices);
+    }
 }
 
 export default Group;
