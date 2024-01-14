@@ -1,4 +1,3 @@
-import { PixiMatterGroup } from "./2d/pixi-matter/interfaces.pm";
 import Container from "./container";
 
 abstract class Game extends Container {
@@ -21,6 +20,7 @@ abstract class Game extends Container {
         this.createApplication()
             .createWorld()
             .createUi()
+            .createModels()
             .loadAssets();
 
         this.$listen({
