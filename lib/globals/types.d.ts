@@ -92,7 +92,7 @@ declare type GameOptions = {
     container: HTMLElement;
     mixins?: Mixin[];
     assets?: {
-        manifest: string;
+        basePath: string;
     };
     options: {
         world: {
@@ -126,14 +126,14 @@ declare type BundleConfig = {
     assets: ArrayOr<any>;
 }
 
-declare type KeyAttributeConfig = {
-    key: string;
-    [key: string]: any;
-    [key: number]: any;
+declare type KeyAttributeConfig<T = AnyObject> = {
+    key?: string;
+    [key: string]: T;
+    [key: number]: T;
 }
 
-declare type CollectionOptions = {
+declare type CollectionOptions<T = AnyObject> = {
     key: string;
-    items: KeyAttributeConfig[];
+    items: KeyAttributeConfig<T>[];
     catalogue?: any;
-} & CollectionDefTypes | KeyAttributeConfig[];
+} & CollectionDefTypes | KeyAttributeConfig<T>[];
