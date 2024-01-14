@@ -4,7 +4,7 @@ import { snakeCase } from "@/core/utils/string.util";
 class UI extends Container{
     protected name: string;
 
-    constructor(options: AnyObject = {}) {
+    constructor(options: AnyObject) {
         super();
 
         this.name = snakeCase(this.constructor.name);
@@ -30,11 +30,12 @@ class UI extends Container{
     filter_size(size: Size2D): Size2D {
         const { screen } = this.app;
 
-        for (let key in ['width', 'height']) {
-            const attribute = key as keyof Size2D;
-            if (size.hasOwnProperty(attribute) && size[attribute] >= 0 && size[attribute] <= 1) {
-                size[attribute] *= screen[attribute];
-            }
+        if (size.width >= 0 && size.width <= 1) {
+            size.width *= screen.width;
+        }
+
+        if (size.height >= 0 && size.height <= 1) {
+            size.height *= screen.height;
         }
 
         return size;
