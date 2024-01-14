@@ -1,10 +1,11 @@
 import UI from "@/core/2d/pixi/ui/ui";
-import { Sprite } from "pixi.js";
-class Button extends UI {
-    
-    view?: Sprite;
+import { DisplayObject } from "pixi.js";
 
-    setView(view: Sprite) {
+abstract class Button extends UI {
+    
+    view?: DisplayObject;
+
+    setView(view: DisplayObject) {
         this.view = view;
     }
 }
