@@ -1,6 +1,6 @@
 import Collection from "@/core/lib/collection";
 import { raw } from "@/core/utils/object.util";
-import Screen from "../ui/screen";
+import Screen from "@/core/2d/pixi/ui/screen";
 
 class ScreensCollection extends Collection {
 
