@@ -52,22 +52,23 @@ class Group extends Model {
     }
 
     updatePosition(): this {
-        const bounds = this.bounds();
-        this.model.position.set(
-            (bounds.min.x + bounds.max.x) * 0.5,
-            (bounds.min.y + bounds.max.y) * 0.5
+        const { min, max } = this.bounds();
+        const  { position } = this.model;
+        position.set(
+            (min.x + max.x) * 0.5,
+            (min.y + max.y) * 0.5
         );
 
         return this;
     } 
 
     bounds(): Bounds {
-        var bodies = Composite.allBodies(this.body),
+        const bodies = Composite.allBodies(this.body),
             vertices = [];
 
-        for (var i = 0; i < bodies.length; i += 1) {
-            var body = bodies[i];
-            vertices.push(body.bounds.min, body.bounds.max);
+        for (let i = 0; i < bodies.length; i += 1) {
+            const { bounds } = bodies[i];
+            vertices.push(bounds.min, bounds.max);
         }
 
         return Bounds.create(vertices);

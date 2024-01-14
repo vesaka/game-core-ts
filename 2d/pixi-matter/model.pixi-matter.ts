@@ -7,7 +7,7 @@ import { between } from "@/core/utils/math.util";
 
 const ARRAY_ATTRIBUTES = ['axes', 'vertices', 'parts', ];
 
-class Model<DisplayObject> extends Container implements ModelInterface {
+class Model extends Container implements ModelInterface {
 
     protected model?: any;
 
