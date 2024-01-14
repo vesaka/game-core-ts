@@ -3,15 +3,15 @@ import { Container, EventMode } from "pixi.js";
 import Button from "./button";
 import Label from "./label";
 
-class Screen extends UI {
+abstract class Screen extends UI {
     
     protected view: Container;
 
-    protected layers: { [key: string]: Container } = {};
+    protected layers: KeyAttributeConfig<Container> = {};
 
-    protected buttons: { [key: string]: Button } = {};
+    protected buttons: KeyAttributeConfig<Button> = {};
 
-    protected labels: { [key: string]: Label } = {};
+    protected labels: KeyAttributeConfig<Label> = {};
 
     protected models?: CollectionInterface;
 
@@ -63,10 +63,6 @@ class Screen extends UI {
         }
     }
 
-    loadModel(key: string) {
-        
-    }
-
     addChild() {
 
     }
@@ -75,7 +71,7 @@ class Screen extends UI {
         if (screen !== this) {
             this.hide();
         }
-    }    
+    }
 
 
 }
