@@ -7,7 +7,9 @@ import { between } from "@/core/utils/math.util";
 
 const ARRAY_ATTRIBUTES = ['axes', 'vertices', 'parts', ];
 
-class Model extends Container implements ModelInterface {
+class Model<DisplayObject> extends Container implements ModelInterface {
+
+    protected model?: any;
 
     protected _name: string = 'model';
 
@@ -116,6 +118,12 @@ class Model extends Container implements ModelInterface {
     setY(y: number): this {
         Body.setPosition(this.body, { x: this.body.position.x, y });
         this.model.y = y;
+        return this;
+    }
+
+    setXY(x: number, y: number): this {
+        Body.setPosition(this.body, { x, y });
+        this.model.position.set(x, y);
         return this;
     }
 
