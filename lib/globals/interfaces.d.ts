@@ -24,11 +24,11 @@ declare interface Game3DInterface extends GameInterface {
 }
 
 declare interface ModelInterface {
-
+    protected model?: any;
 }
 
 declare interface Model2DInterface extends ModelInterface {
-
+    protected model: any;
 }
 
 declare interface Model3DInterface extends ModelInterface {
@@ -36,7 +36,7 @@ declare interface Model3DInterface extends ModelInterface {
 }
 
 declare interface CollectionInterface {
-    all(): any[];
+    all<T = []>(): T[];
     count(condition?: ArrayFilterCallback): number;
     avarage(key: string | number): number;
     avg(key: string | number): number;
