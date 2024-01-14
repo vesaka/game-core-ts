@@ -4,7 +4,7 @@ interface EventsList<T = string[]> {
     [key: string]: T;
 };
 
-class Container {
+class Container<T = GameOptions> {
 
     mixins?: Mixin[] = [];
 
@@ -12,11 +12,11 @@ class Container {
 
     static options?: GameOptions;
 
-    static layers?: any[]
+    static layers?: any[];
     
     [key: string]: Function | any;
 
-    constructor(options?: GameOptions, toPrototype: boolean = true) {
+    constructor(options?: T, toPrototype: boolean = true) {
         if (toPrototype) {
             Object.assign(Container.prototype, options);
         } else {
