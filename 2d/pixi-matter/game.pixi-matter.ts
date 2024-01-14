@@ -15,9 +15,7 @@ class GamePixiMatter extends Game2D {
     constructor(options: GameOptions) {
         super(options);
 
-        this.$listen({
-            model: ['created', 'destroyed']
-        });
+       
     }
 
     load(): this {
@@ -34,7 +32,7 @@ class GamePixiMatter extends Game2D {
             height: this.options.world.size.height,
             resolution: Math.min(window.devicePixelRatio || 1, 2),
             backgroundColor: 0x101010,
-        }, this.options.app));
+        }, this.options.app));   
 
 
         this.$set('app', app);
@@ -44,7 +42,9 @@ class GamePixiMatter extends Game2D {
 
         this.app.stage.addChild(this.scene); // Add the scene container to the app stage
         this.container?.appendChild(this.app.view);
-
+        this.$listen({
+            model: ['created', 'destroyed']
+        });
         return this;
     }
 
@@ -83,7 +83,7 @@ class GamePixiMatter extends Game2D {
     }
 
     destroy(): void {
-
+        this.$clear();
     }
 
     add(object: PixiMatterModel, layer?: string): void {
