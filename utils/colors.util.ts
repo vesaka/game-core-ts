@@ -82,3 +82,20 @@ export const hex2base = (hex: string) => {
         b = parseInt(hex.slice(5, 7), 16);
     return (r | g << 8 | b << 16);
 };
+
+export const linearGradientTexture = (w: number, h: number, colorStops: string[]): HTMLCanvasElement => {
+    const canvas = document.createElement('canvas');
+
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
+    const gradient = ctx.createLinearGradient(0, 0, w, h);
+    for (let i = 0; i < colorStops.length; i++) {
+        gradient.addColorStop(i / 100, colorStops[i]);
+    }
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, w, h);
+
+    return canvas;
+}
