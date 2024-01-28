@@ -40,6 +40,16 @@ class UI extends Container{
 
         return size;
     }
+
+    
+    t(key: string, def: string = ''): string {
+        // console.log(this.i18n.messages, this.i18n.messages[this.i18n.locale], key);  
+        return this.i18n.get(key, def);  
+    }
+
+    translate(key: string, def: string = ''): string {
+        return this.i18n.get(key, def);
+    }
 }
 
 export default UI;
