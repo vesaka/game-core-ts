@@ -36,7 +36,7 @@ declare interface Model3DInterface extends ModelInterface {
 }
 
 declare interface CollectionInterface {
-    all<T = []>(): T[];
+    all(): T[];
     count(condition?: ArrayFilterCallback): number;
     avarage(key: string | number): number;
     avg(key: string | number): number;
