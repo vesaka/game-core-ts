@@ -51,7 +51,16 @@ class GamePixiMatter extends Game2D {
     async loadAssets() {
         await this.loader.load()
     }
+
+    createProviders(): this {
+        return this;
+    }
+    
     createModels(): this {
+        return this;
+    }
+
+    createI18n(): this {
         return this;
     }
 
