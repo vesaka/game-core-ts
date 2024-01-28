@@ -28,7 +28,7 @@ class ScreensCollection extends Collection {
         let screen: Screen = this.first((item: Screen) => item.key === key);
 
         if (!screen) {
-            const screenOptions = raw(types[key]);
+            const screenOptions = raw(types[key] || {});
             screenOptions.key = key;
 
             screen = this.addItem(screenOptions);
@@ -37,6 +37,10 @@ class ScreensCollection extends Collection {
 
         return screen;
         
+    }
+
+    screen_change(name: string) {
+        this.select(name);
     }
 
     select(key: string) {
