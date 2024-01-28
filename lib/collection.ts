@@ -61,7 +61,7 @@ class Collection extends Container implements CollectionInterface {
             const item = extend(def, types[key]) as any;
             item.key = key;
             items.push(this.buildItem(item));
-        }
+        } 
 
         return items;
 
@@ -283,6 +283,11 @@ class Collection extends Container implements CollectionInterface {
 
     slice(start = 0, end = 0) {
         return new Collection(this.items.slice(start, end));
+    }
+
+    clear() {
+        this.items = [];
+        return this;
     }
 
     create(...names: string[]) {
