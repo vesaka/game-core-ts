@@ -91,9 +91,13 @@ declare type Vector3D = {
 declare type GameOptions = {
     container: HTMLElement;
     mixins?: Mixin[];
-    assets?: {
+        assets?: {
         basePath: string;
     };
+    i18n?: {
+        locale: string;
+        basePath: string;
+    },
     options: {
         world: {
             size: Size2D;
