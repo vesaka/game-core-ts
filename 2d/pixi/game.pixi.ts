@@ -5,12 +5,9 @@ import PixiLoader from './loader.pixi';
 class GamePixi extends Game2D {
 
     run(): void {
-        throw new Error('Method not implemented.');
+        
     }
-    constructor(options: GameOptions) {
-        super(options);
 
-    }
     load() {
         if (this.didLoad) {
             return this;
@@ -43,9 +40,19 @@ class GamePixi extends Game2D {
     async loadAssets() {
         await this.loader.load();
     }
+
+    createProviders(): this {
+        return this;
+    }
+    
     createModels() {
         return this;
     }
+
+    createI18n() {
+        return this;
+    }
+
     createUi() {
         return this;
     }

@@ -18,8 +18,10 @@ abstract class Game extends Container {
         window.addEventListener('resize', this.onResize.bind(this));
 
         this.createApplication()
+            .createProviders()
             .createWorld()
             .createUi()
+            .createI18n()
             .createModels()
             .loadAssets();
 
@@ -33,11 +35,15 @@ abstract class Game extends Container {
 
     abstract createApplication(): this;
 
+    abstract createProviders(): this;
+
     abstract createWorld(): this;
 
     abstract createModels(): this;
 
     abstract createUi(): this;
+
+    abstract createI18n(): this;
 
     abstract loadAssets(): Promise<any>;
 
@@ -48,7 +54,7 @@ abstract class Game extends Container {
     abstract load(): this;
 
     abstract run(): void;
-
+    
     game_destroy(): void {
         window.removeEventListener('orientationchange', this.onResize.bind(this));
         window.removeEventListener('resize', this.onResize.bind(this));

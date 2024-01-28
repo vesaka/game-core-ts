@@ -90,7 +90,15 @@ class GameMatter extends Game2D {
         return this;
     }
 
+    createProviders(): this {
+        return this;
+    }
+
     createModels(): this { 
+        return this;
+    }
+
+    createI18n(): this {
         return this;
     }
 
