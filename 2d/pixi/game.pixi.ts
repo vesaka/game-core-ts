@@ -22,12 +22,13 @@ class GamePixi extends Game2D {
             backgroundColor: 0x101010,
         }, this.options.app));   
 
+        this.$clear();
+        this.$set('app', app, true);
+        this.$set('layers', {}, true);
+        this.$set('scene', new PixiContainer(), true);
 
-        this.$set('app', app);
-        this.$set('layers', {});
-        this.$set('scene', new PixiContainer());
-
-        this.$set('loader', new PixiLoader(this.assets));
+        this.$set('loader', new PixiLoader(this.assets), true);
+        
 
         this.app.stage.addChild(this.scene); // Add the scene container to the app stage
         this.container?.appendChild(this.app.view);
