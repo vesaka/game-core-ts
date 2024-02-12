@@ -97,8 +97,14 @@ class Container<T = GameOptions> {
         }
     }
 
-    $set(name: string, value: any) {
+    $set(name: string, value: any, overwrite: boolean = false) {
+        if (!overwrite && Container.prototype[name]) {
+            return
+        }
+    
         Container.prototype[name] = value;
+        
+        
     }
 }
 
