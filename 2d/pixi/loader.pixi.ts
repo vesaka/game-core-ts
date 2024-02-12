@@ -24,7 +24,7 @@ class Loader extends Container {
 
         const [ firstBundle, ...restBundles ] = bundles;
 
-        await this.loadBundle(firstBundle, (progress: number) => {
+        await this.loadBundle(firstBundle.name, (progress: number) => {
             this.$emit('assets_loading', progress);
         });
 
@@ -47,25 +47,19 @@ class Loader extends Container {
         return Assets.addBundle(name, bundle);
     }
 
-    async loadBundle(bundle: AssetsBundle, callback: ProgressCallback) {
-        try {
-            const assets = await Assets.loadBundle(bundle.name, callback);
-            
-            // for (let key in assets) {
-            //     console.log(key);
-            //     // this.$emitAndStop(`loaded_${key}`, assets[key])
-            // }
 
+    loadBundle(bundleName: string, callback: ProgressCallback) {
+        try {
+            return Assets.loadBundle(bundleName, callback);
         } catch (e) {
-            console.log(bundle.name);
-            this.$emit(`asset_failed`, bundle.name);
+            this.$emit(`asset_failed`, bundleName);
             console.error(e)
-        }
+        }  
 
     }
 
     async backgroundLoadBundle(name: string) {
-
+        
     }
 
     async loadAsset(name: string) {
