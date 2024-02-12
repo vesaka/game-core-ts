@@ -2,6 +2,7 @@ import UI from "@/core/2d/pixi/ui/ui";
 import { Container, EventMode } from "pixi.js";
 import Button from "./button";
 import Label from "./label";
+import { camelCase } from "@/core/utils/string.util";
 
 abstract class Screen extends UI {
     
@@ -36,7 +37,7 @@ abstract class Screen extends UI {
 
     destroy() {}
 
-    show(mode: EventMode = 'auto') {
+    show(mode: EventMode = 'static') {
         this.$emit('screen_show', this);
         this.i18n.load(this.getKey());
         this.view.eventMode = mode;
@@ -48,9 +49,9 @@ abstract class Screen extends UI {
         this.$emit('screen_hide', this);
         this.view.eventMode = mode;
         this.view.visible = false;
-
         this.$emit('screen_hidden', this);
     }
+
 
     enable(mode: EventMode = 'auto') {
         this.view.eventMode = mode;
@@ -83,7 +84,7 @@ abstract class Screen extends UI {
     }
 
     getKey() {
-        return this.key || this.name.replace('_screen', '');
+        return this.key || camelCase(this.name.replace('_screen', '').replace('_', '-'));
     }
 
 
