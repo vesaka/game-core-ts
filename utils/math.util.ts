@@ -110,3 +110,23 @@ export const randFromArray = (value: Array<number>): number => {
     
     return value;
 };
+
+export const fitDimmensions = (width: number, height: number, maxWidth: number, maxHeight: number): {width: number, height: number} => {
+    let ratio = Math.min(maxWidth / width, maxHeight / height);
+    return {width: width * ratio, height: height * ratio};
+}
+
+export const fitRatio = (width: number, height: number, maxWidth: number, maxHeight: number, fixed: number = 2): number => {
+    
+    if (width > maxWidth) {
+        height = height * (maxWidth / width);
+        width = maxWidth;
+    }
+    
+    if (height > maxHeight) {
+        width = width * (maxHeight / height);
+        height = maxHeight;
+    }
+
+    return Number(Math.min(1, Math.min(width / maxWidth, height / maxHeight)).toFixed(fixed));
+}
