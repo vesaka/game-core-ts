@@ -17,3 +17,7 @@ export const kebabCase = (str: string): string => {
 export const snakeCase = (str: string): string => {
     return str.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase();
 };
+
+export const pascalCase = (str: string): string => {
+    return str.replace(/(\w)(\w*)/g, (_, g1, g2) => g1.toUpperCase() + g2.toLowerCase());
+};
