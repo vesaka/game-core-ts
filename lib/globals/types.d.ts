@@ -98,6 +98,7 @@ declare type GameOptions = {
         locale: string;
         basePath: string;
     },
+    store?: {},
     options: {
         world: {
             size: Size2D;
@@ -141,3 +142,52 @@ declare type CollectionOptions<T = AnyObject> = {
     items: KeyAttributeConfig<T>[];
     catalogue?: any;
 } & CollectionDefTypes | KeyAttributeConfig<T>[];
+
+declare type LogicalOperator = '&' | '|' | '||' | '&&' | '==' | '!=' | '===' | '!==' | '<' | '>' | '<=' | '>=' | 'in' | 'not in';
+declare type MathOperator = '+' | '-' | '*' | '/' | '%';
+
+declare type Requirement<T = string, K = number> = [T, LogicalOperator, K];
+declare type ImpactCommand<T = string, K = number> = [T, MathOperator, K];
+declare type Choice = {
+    text: string;
+    requirements?: Requirement<string, number>[];
+    impact?: ImpactCommand<string, number>[];
+    action?: string;
+}
+
+declare type OptionalText = {r
+    seen?: boolean;
+    enabled?: boolean;
+    requirements?: Requirement<string, number>[];
+    content: Content
+}
+
+declare type Content = Array<string, Choice>;
+
+declare type InteractiveScene<T = string> = {
+    description?: string;
+    background: string;
+    type: T = 'narrator',
+    seen?: boolean = false;
+    enabled?: boolean = true;
+    character: string = 'narrator';
+    content: Content;
+    requirements?: Requirement<string, number>[];
+    impact?: ImpactCommand<string, number>[];
+    choices?: Choice[];
+}
+
+declare type ActionsList = {
+    [key: string]: string[];
+}
+
+declare type PaginationOptions = {
+    page: number;
+    pageSize: number;
+    total: number;
+    offset: number;
+    size: Size2D,
+    position: Vector2D = { x: 0, y: 0},
+
+
+}
