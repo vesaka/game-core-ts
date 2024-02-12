@@ -41,6 +41,20 @@ class UI extends Container{
         return size;
     }
 
+    filter_offset(offset: Vector2D): Vector2D {
+        const { screen } = this.app;
+
+        if (offset.x >= 0 && offset.x <= 1) {
+            offset.x *= screen.width;
+        }
+
+        if (offset.y >= 0 && offset.y <= 1) {
+            offset.y *= screen.height;
+        }
+
+        return offset;
+    }
+
     
     t(key: string, def: string = ''): string {
         // console.log(this.i18n.messages, this.i18n.messages[this.i18n.locale], key);  
