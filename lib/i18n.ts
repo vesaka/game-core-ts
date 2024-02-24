@@ -19,7 +19,7 @@ class I18n {
         this.env = import.meta.env.MODE;
     }
 
-    async load(path: string): Promise<void> {
+    async _load(path: string): Promise<void> {
         const { messages, locale, base } = this;
         if (!messages[locale]) {
             messages[locale] = {};
@@ -29,6 +29,7 @@ class I18n {
             let data: ApiResponse = {};
             try {
                 const fallbackData: ApiResponse = await import(/* @vite-ignore */`${base}${this.defaultLocale}/${path}.json`)
+
                 if (locale === this.defaultLocale) {
                     data = fallbackData.default;
                 } else {
@@ -42,6 +43,28 @@ class I18n {
             }
             messages[locale][path] = data || {};
         }
+    }
+
+    async load(path: string): Promise<any> {
+        const { messages, locale, base } = this;
+        if (!messages[locale]) {
+            messages[locale] = {};
+        }
+        
+        if (!messages[locale][path]) {
+            return import(/* @vite-ignore */`${base}${this.defaultLocale}/${path}.json`).then((result: { default: any }) => {
+                if (locale !== this.defaultLocale) {   
+                    return import(/* @vite-ignore */`${base}${locale}/${path}.json`).then((data: { default: any }) => {
+                        messages[locale][path] = deepMerge(result.default, data.default);
+                        return Promise.resolve(messages[locale]);
+                    });                
+                }
+                messages[locale][path] = result.default || {};
+                return Promise.resolve(messages[locale]);
+            });
+        }
+
+        return Promise.resolve(messages[locale]);
     }
 
     setLocale(locale: string): void {

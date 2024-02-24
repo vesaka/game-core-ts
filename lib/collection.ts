@@ -1,11 +1,11 @@
 import Container from '@/core/container';
 import { extend, raw } from '@/core/utils/object.util';
 
-class Collection extends Container implements CollectionInterface {
+class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implements CollectionInterface<T> {
 
-    protected items: any[] = [];
+    protected items: T[] = [];
 
-    protected catalogue: any = {}; 
+    protected catalogue: CatalogueList<K> = {}; 
 
     protected name: string = 'collection';
 
@@ -19,14 +19,14 @@ class Collection extends Container implements CollectionInterface {
     };
 
 
-    constructor(options?: CollectionOptions) {
+    constructor(options?: CollectionOptions<T, K>) {
         super();
 
         this.setup(options);
         
     }
 
-    setup(options?: CollectionOptions) {
+    setup(options?: CollectionOptions<T, K>) {
         if (Array.isArray(options)) {
             this.items = options;
         } else if (options) {
@@ -55,7 +55,7 @@ class Collection extends Container implements CollectionInterface {
 
     buildItems() {
         const { def, types } = this;
-        const items: any[] = [];
+        const items: T[] = [];
 
         for (let key in types) {
             const item = extend(def, types[key]) as any;
@@ -69,7 +69,7 @@ class Collection extends Container implements CollectionInterface {
 
     buildItem(options: any): any {
         const { catalogue } = this;
-        const itemClass = catalogue[options.key] || catalogue[Object.keys(catalogue)[0]];
+        const itemClass: any = catalogue[options.key] || catalogue[Object.keys(catalogue)[0]];
         return new itemClass(options);        
     }
 
@@ -163,7 +163,7 @@ class Collection extends Container implements CollectionInterface {
         return accumulator;
     }
 
-    filter(condition: ArrayFilterCallback): Collection {
+    filter(condition: ArrayFilterCallback): Collection<T> {
         if (typeof condition !== 'function') {
             condition = (item: any) => {
                 return undefined !== item;
@@ -183,23 +183,23 @@ class Collection extends Container implements CollectionInterface {
         return this;
     }
     
-    min(property: any) {
+    min(property: keyof T | Function) {
         if (0 === this.items.length) {
             return null;
         }
         
         let min: number = 10000, callback: Function = () => true;
         
-        if (['string', 'number'].includes(typeof property)) {
-            min = this.items[0][property];
+        if (typeof property === 'function') {
+            min = property(this.items[0]);
+            callback = property;
+        } else if (['string', 'number'].includes(typeof property)) {
+            min = this.items[0][property] as number;
             callback = (item: any) => {
                 if (min > item[property]) {
                     min = item[property];
                 }
             };
-        } else if (typeof property === 'function') {
-            min = property(this.items[0]);
-            callback = property;
         }
         
         this.each(callback);
@@ -207,23 +207,22 @@ class Collection extends Container implements CollectionInterface {
         return min;
     }
     
-    max(property: any = null) {
+    max(property: Function | keyof T) {
         if (0 === this.items.length) {
             return null;
         }
         
         let max: number = 0, callback: Function = () => true;
-        
-        if (['string', 'number'].includes(typeof property)) {
-            max = this.items[0][property];
+        if (typeof property === 'function') {
+            max = property(this.items[0]);
+            callback = property;
+        } else if (['string', 'number'].includes(typeof property)) {
+            max = this.items[0][property] as number;
             callback = (item: any) => {
                 if (max < item[property]) {
                     max = item[property];
                 }
             };
-        } else if (typeof property === 'function') {
-            max = property(this.items[0]);
-            callback = property;
         }
         
         this.each(callback);
@@ -231,12 +230,12 @@ class Collection extends Container implements CollectionInterface {
         return max;
     }
     
-    unique(property: any) {
+    unique(property: MapFunction<T> | keyof T | null = null) {
         let items = [];
         if (typeof property === 'function') {
             items = this.items.map(property);
-        } else if (['string', 'number'].includes(typeof property)) {
-            items = this.items.map(item => item[property]);
+        } else if (['string', 'number'].includes(typeof property) && null !== property) {
+            items = this.items.map((item: T) => item[property]);
         } else {
             items = this.items;
         }

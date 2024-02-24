@@ -111,12 +111,7 @@ export const randFromArray = (value: Array<number>): number => {
     return value;
 };
 
-export const fitDimmensions = (width: number, height: number, maxWidth: number, maxHeight: number): {width: number, height: number} => {
-    let ratio = Math.min(maxWidth / width, maxHeight / height);
-    return {width: width * ratio, height: height * ratio};
-}
-
-export const fitRatio = (width: number, height: number, maxWidth: number, maxHeight: number, fixed: number = 2): number => {
+export const fitRatio = (width: number, height: number, maxWidth: number, maxHeight: number): number => {
     
     if (width > maxWidth) {
         height = height * (maxWidth / width);
@@ -128,5 +123,46 @@ export const fitRatio = (width: number, height: number, maxWidth: number, maxHei
         height = maxHeight;
     }
 
-    return Number(Math.min(1, Math.min(width / maxWidth, height / maxHeight)).toFixed(fixed));
+    return Math.min(1, Math.min(width / maxWidth, height / maxHeight));
+}
+
+export const fitSize = (srcWidth: number, srcHeight: number, maxWidth: number, maxHeight: number) => {
+    const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
+
+    let width = srcWidth * ratio;
+    let height = srcHeight * ratio;
+
+    if (width > maxWidth) {
+        height = height * (maxWidth / width);
+        width = maxWidth;
+    }
+    
+    if (height > maxHeight) {
+        width = width * (maxHeight / height);
+        height = maxHeight;
+    }
+
+    return { width, height };
+}
+
+export const fitAspectRatio = (width: number, height: number, maxWidth: number, maxHeight: number): number => {
+    
+    if (width > maxWidth) {
+        height = height * (maxWidth / width);
+        width = maxWidth;
+    }
+    
+    if (height > maxHeight) {
+        width = width * (maxHeight / height);
+        height = maxHeight;
+    }
+
+    const ratio = Math.min(width / maxWidth, height / maxHeight)
+
+    if (width >= height) {
+        return Math.max(1, ratio);
+    }
+
+    return Math.min(1, ratio);
+
 }

@@ -4,6 +4,35 @@ declare type RequestParams = Object;
 declare type RequestHeaders = AxiosHeaders | Object;
 declare type FunctionOrNull = Function | null;
 declare type ArrayFilterCallback = (item: any, index: number) => boolean;
+declare type ValueOf<T> = T[keyof T];
+declare type KeyOf<T> = keyof T;
+declare type ArrayOr<T> = T | T[];
+declare type StringOr<T> = T | string;
+declare type NumberOr<T> = T | number;
+declare type ObjectOr<T> = T | Object;
+declare type BooleanOr<T> = T | boolean;
+
+declare type CallbackFunction<T> = (event: T) => unknown;
+
+type emptyOrOne = '' | 1;
+type oneToNine = 1|2|3|4|5|6|7|8|9
+type zeroToNine = 0|1|2|3|4|5|6|7|8|9
+
+type YYYY = `${emptyOrOne}9${zeroToNine}${zeroToNine}` | `20${zeroToNine}${zeroToNine}`
+type MM = `0${oneToNine}` | `1${0|1|2}`
+type DD = `${0}${oneToNine}` | `${1|2}${zeroToNine}` | `3${0|1}`
+declare type RawDateString = `${YYYY}${MM}${DD}`;
+declare type SlashDateString = `${MM}/${DD}/${YYYY}`;
+declare type DashDateString = `${MM}-${DD}-${YYYY}`;
+declare type TimeString = `${HH}:${MM}:${SS}`;
+declare type TimeDashString = `${DashDateString}T${TimeString}`;
+
+declare type OldYear = `${zeroToNine}${zeroToNine}${zeroToNine}${zeroToNine}`;
+declare type NewYear = `${oneToNine}${zeroToNine}${zeroToNine}${zeroToNine}`;
+
+declare type Alignment = ['left', 'right', 'center', 'justify', 'initial', 'inherit'];
+
+declare type MapFunction<T> = (item: T, index: number, array: Array<T>) => T;
 
 declare type ConnectOptions = {
     url: string;
@@ -45,17 +74,15 @@ declare type UiCollection = {
 }
 
 declare type ModelOptions = {
-    size?: Size2D | Size3D;
-    position?: Vector2D | Vector3D;
     rotation?: Vector2D | Vector3D;
     [key: string]: any;
-}
+} & UiOptions;
 
-declare type UiOptions = {
-    style?: any;
-    position?: Vector2D;
-    [key: string]: any;
-}
+// declare type UiOptions = {
+//     style?: any;
+//     position?: Vector2D;
+//     [key: string]: any;
+// }
 
 declare type ClassList = {
     [key: string]: boolean;
@@ -119,13 +146,6 @@ declare type PixiLoaderOptions = {
     manifest: PixiManifest | string;
 }
 
-declare type PixiGraphicsOptions = {
-    fill?: number | string;
-    color?: number | string;
-    line: LineStyle;
-    style: TextStyle;
-}
-
 declare type BundleConfig = {
     name: string;
     assets: ArrayOr<any>;
@@ -137,49 +157,105 @@ declare type KeyAttributeConfig<T = AnyObject> = {
     [key: number]: T;
 }
 
-declare type CollectionOptions<T = AnyObject> = {
+declare type CatalogueList<T> = {
+    [key: string]: T;
+}
+
+declare type CollectionOptions<T = KeyAttributeConfig<AnyObject>, K = CatalogueList<AnyObject>> = {
     key: string;
-    items: KeyAttributeConfig<T>[];
-    catalogue?: any;
-} & CollectionDefTypes | KeyAttributeConfig<T>[];
+    items: T[];
+    catalogue?: K;
+} & CollectionDefTypes | T[];
 
 declare type LogicalOperator = '&' | '|' | '||' | '&&' | '==' | '!=' | '===' | '!==' | '<' | '>' | '<=' | '>=' | 'in' | 'not in';
 declare type MathOperator = '+' | '-' | '*' | '/' | '%';
 
 declare type Requirement<T = string, K = number> = [T, LogicalOperator, K];
-declare type ImpactCommand<T = string, K = number> = [T, MathOperator, K];
+declare type ImpactCommand = string;
 declare type Choice = {
     text: string;
-    requirements?: Requirement<string, number>[];
-    impact?: ImpactCommand<string, number>[];
+    requirements: Requirement<string, number>[] | string;
+    impact?: ImpactCommand[];
     action?: string;
 }
 
-declare type OptionalText = {r
+declare type OptionalText = {
     seen?: boolean;
     enabled?: boolean;
     requirements?: Requirement<string, number>[];
     content: Content
 }
 
-declare type Content = Array<string, Choice>;
+declare type WithText = {
+    text: string;
+}
+
+declare type WithBackground = {
+    background: string;
+} & WithText;
+
+declare type WithChoices = {
+    choices: Array<Choice>;
+} & WithText;
+
+declare type WithChoices = {
+    choices: Array<Choice>;
+} & WithText;
+
+declare type WithRequirements = {
+    requirements: Requirement<string, number>[];
+} & WithText;
+
+declare type ContentEntry = {
+    text: string;
+    background: string;
+    choices: Array<Choice>;
+    requirements: Requirement<string, number>[];
+    seen: boolean;
+};
+
+declare type ContentWith<K extends ValueOf<ContentAttributes>, V> = {
+    [key: K]: V;
+    text: string;
+}
+
+const ContentAttributes = ['choices', 'requirements', 'background'];
+
+declare type Content = Array<string | ContentEntry>;
 
 declare type InteractiveScene<T = string> = {
-    description?: string;
     background: string;
     type: T = 'narrator',
     seen?: boolean = false;
-    enabled?: boolean = true;
     character: string = 'narrator';
     content: Content;
     requirements?: Requirement<string, number>[];
-    impact?: ImpactCommand<string, number>[];
-    choices?: Choice[];
+    next: string;
 }
 
 declare type ActionsList = {
     [key: string]: string[];
 }
+
+declare type PixiGraphicsOptions = {
+    fill?: number | string;
+    color?: number | string;
+    alpha: number;
+    line: LineStyle;
+    style: TextStyle;
+}
+
+declare type UiOptions = {
+    key: string;
+    position: Vector2D;
+    size: Size2D;
+    rotation: Vector2D;
+    offset: Vector2D;
+    margin: NumberOr<Vector2D>;
+    padding: NumberOr<Vector2D>;
+    align: ValueOf<Alignment>;
+} & PixiGraphicsOptions;
+
 
 declare type PaginationOptions = {
     page: number;
@@ -187,7 +263,68 @@ declare type PaginationOptions = {
     total: number;
     offset: number;
     size: Size2D,
-    position: Vector2D = { x: 0, y: 0},
+    position: Vector2D
+}
+
+declare type GridOptions = {
+    rows: number;
+    columns: number;
+    offset: number;
+    slotSize: Size2D;
+} & UiOptions;
+
+declare type SlotOptions = {
+    index: number;
+} & UiOptions;
+
+declare type TextOptions = {
+    text: string;
+} & UiOptions;
+
+declare type ModalOptions = UiOptions;
 
 
+declare type ModalComponentOptions = {
+    header: BooleanOr<UiOptions>;
+    body: UiOptions;
+} & ModalOptions;   
+
+declare type ModalPromptOptions<H = string, B = string, O = string, C = string, X = string, F = Function> = {
+    transition: Function = () => {};
+    body: B;
+    header: H;
+    confirm: O = 'OK',
+    cancel: C = 'Cancel',
+    dismiss: X = 'X',
+    callbacks: {
+        ok: CallbackFunction<F>,
+        cancel: CallbackFunction<F>,
+        dismiss: CallbackFunction<F>,
+    },
+    onConfirm?: CallbackFunction<F>;
+    onCancel?: CallbackFunction<F>;
+    onDismiss?: CallbackFunction<F>;
+    onReady?: Function;
+} & ModalOptions;
+
+declare enum ModalType {
+    INFO = 'info',
+    WARNING = 'warning',
+    SUCCESS = 'success',
+    ERROR = 'error',
+}
+
+declare type ModalButtonsTexts = {
+    confirm: string;
+    cancel: string;
+    dismiss: string;
+} & ModalOptions;
+
+declare type ModalConfirmTexts = {
+    title: string;
+    text: string;
+} & ModalButtonsTexts;
+
+declare type TransitionalProps = {
+    [key: string]: [number, number];
 }

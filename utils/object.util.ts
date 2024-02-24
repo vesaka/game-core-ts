@@ -1,4 +1,4 @@
-export const raw = (obj: object) => {
+export const raw = <T = object>(obj: T): T => {
     return JSON.parse(JSON.stringify(obj));
 };
 
@@ -48,6 +48,18 @@ export const deepGet = (obj: AnyObject | any, path: string, defaultValue: any = 
     return obj;
 };
 
-const isSafeKey = (key: string) => {
+export const deepSet = (obj: AnyObject, path: string, value: any) => {
+    let i, key, keys = path.split('.');
+    for (i = 0; i < keys.length - 1; i++) {
+        key = keys[i];
+        if (!obj[key] || !isSafeKey(key)) {
+            obj[key] = {};
+        }
+        obj = obj[key];
+    }
+    obj[keys[i]] = value;
+}
+
+const isSafeKey = <T = string>(key: T) => {
     return key !== '__proto__' && key !== 'prototype' && key !== 'constructor';
 };

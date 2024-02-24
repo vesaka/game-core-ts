@@ -1,19 +1,14 @@
 import UI from "@/core/2d/pixi/ui/ui";
 import { Graphics, Text, DisplayObject, Rectangle } from "pixi.js";
 
-class Pagination extends UI {
+class Pagination extends UI<PaginationOptions> {
 
-  view: Graphics;
-
-  protected offset: number = 0;
-
-  protected pageButtons: number = 5;
+  offset: ValueOf<PaginationOptions> = 0;
 
   protected buttons: Graphics[] = [];
 
   constructor(options: PaginationOptions) {
     super(options);
-    this.view = this.createView();
     this.pages = Math.ceil(this.total / this.pageSize);
     this.page = 1;
     this.update();
@@ -54,7 +49,7 @@ class Pagination extends UI {
       button.on('pointerup', () => {
         this.page = index;
         this.update();
-        this.$emit('page_select', index);
+        this.$emit('page_select', this);
       });
       this.enableButton(button);
     } else {
@@ -76,7 +71,12 @@ class Pagination extends UI {
   }
 
   update() {
+    const visible = this.pages > 1;
 
+    this.showStartAndEnd = visible;
+    this.showNextAndPrev = visible;
+    this.view.visible = visible;
+    
     this.buttons.forEach(button => this.view.removeChild(button));
     this.buttons = [];
 
@@ -84,12 +84,12 @@ class Pagination extends UI {
     const from = Math.max(1, Math.min(this.page - maxButtons, this.pages - maxButtons * 2 - 1));
     const to = Math.min(this.pages, Math.max(this.page + maxButtons, maxButtons * 2 + 1));
 
-    this.buttonsCount = maxButtons * 2 + 1
+    this.buttonsCount = Math.min(this.pages, maxButtons * 2 + 1)
           + Number(this.showStartAndEnd) * 2
           + Number(this.showNextAndPrev) * 2
           + Number(!!this.distantPages) * 4;
     const buttonsWidth = this.size.height * this.buttonsCount;
-    this.startX = (this.view.width - buttonsWidth) / 2;
+    this.startX = (this.view.width - buttonsWidth) * 0.5;
 
     if (this.showStartAndEnd) {
       this.createButton(1, true, '<<');
@@ -124,6 +124,17 @@ class Pagination extends UI {
       this.createButton(this.pages, true, '>>');
     }
 
+  }
+  
+  setPages(pages: number) {
+    this.pages = pages;
+    this.update();
+  }
+
+  setTotal(total: number) {
+    this.total = total;
+    this.pages = Math.floor(this.total / this.pageSize) + 1;
+    this.update();
   }
 
 }

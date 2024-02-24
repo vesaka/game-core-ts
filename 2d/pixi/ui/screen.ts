@@ -4,29 +4,31 @@ import Button from "./button";
 import Label from "./label";
 import { camelCase } from "@/core/utils/string.util";
 
-abstract class Screen extends UI {
+abstract class Screen<T = UiOptions> extends UI<T, Container> {
     
-    protected view: Container;
-
-    protected layers: KeyAttributeConfig<Container> = {};
+    protected layers: KeyAttributeConfig<T> = {};
 
     protected buttons: KeyAttributeConfig<Button> = {};
 
     protected labels: KeyAttributeConfig<Label> = {};
 
-    protected models?: CollectionInterface;
+    protected models?: CollectionInterface<T>;
 
-    constructor(options: AnyObject = {}) {
+    protected query?: AnyObject;
+
+    constructor(options: T = {} as T) {
         super(options);
         
-        this.view = new Container();
-        this.view.name = this.name;
         this.scene.addChild(this.view);
 
         this.$listen({
             screen: ['show', 'shown', 'hide', 'hidden', 'change', 'back', 'forward']
         })
  
+    }
+
+    createView(): Container {
+        return new Container();
     }
 
     get active(): boolean {
@@ -39,7 +41,6 @@ abstract class Screen extends UI {
 
     show(mode: EventMode = 'static') {
         this.$emit('screen_show', this);
-        this.i18n.load(this.getKey());
         this.view.eventMode = mode;
         this.view.visible = true;
         this.$emit('screen_shown', this);

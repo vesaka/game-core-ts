@@ -35,16 +35,27 @@ declare interface Model3DInterface extends ModelInterface {
 
 }
 
-declare interface CollectionInterface {
+declare interface CollectionInterface<T> {
     all(): T[];
     count(condition?: ArrayFilterCallback): number;
     avarage(key: string | number): number;
     avg(key: string | number): number;
     add(item: any): this;
-    get(key: number): any;
+    get(key: number): T;
     remove(at: number): this;
     find(condition: Function): any;
     first(condition: Function): any;
     create(...names: string[]): void;
     destroy(...names: string[]): void;
+}
+
+declare type TransitionProps<P = Vector2D> = {
+    [key: string]: [number, number] | [string, string] | [P, P]
+}
+
+declare interface TransitionInterface<T = any, P = AnyObject>  {
+    target: T;
+    settings: P;
+    in: Promise
+    out: Promise
 }
