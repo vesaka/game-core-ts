@@ -49,14 +49,17 @@ class Container<T = GameOptions> {
         }
     }
 
-    applyFilters(options: AnyObject) {
-        let filterMethod;
+    applyFilters<T = AnyObject>(options: T) {
+        let filterMethod: keyof Container,
+            name: keyof Container;
+
         for (let attribute in options) {
+            name = attribute;
             filterMethod = `filter_${attribute}`;
             if (typeof this[filterMethod] === 'function') {
-                this[attribute] = this[filterMethod](options[attribute]);
+                this[name] = this[filterMethod](options[attribute]);
             } else {
-                this[attribute] = options[attribute];
+                this[name] = options[attribute];
             }
         }
     }
