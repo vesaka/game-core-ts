@@ -1,5 +1,5 @@
 import Collection from "@/core/lib/collection";
-import { raw } from "@/core/utils/object.util";
+import { extend } from "@/core/utils/object.util";
 import Screen from "@/core/2d/pixi/ui/screen";
 
 class ScreensCollection extends Collection {
@@ -22,29 +22,32 @@ class ScreensCollection extends Collection {
         screen.show();
     }
 
-    loadScreen(key: string): Screen {
+    loadScreen(key: string, options: AnyObject = {}): Screen {
         const { types } = this;
 
         let screen: Screen = this.first((item: Screen) => item.key === key);
-
         if (!screen) {
-            const screenOptions = raw(types[key] || {});
+            const screenOptions = extend(types[key] || {}, options || {}) as AnyObject;
             screenOptions.key = key;
-
             screen = this.addItem(screenOptions);
-            screen.build();
+            this.i18n.load(screen.getKey()).then(() => {
+                screen.build();
+            });
+
+            this.$emit('screen_loaded', screen);
         }
 
+        
         return screen;
         
     }
 
-    screen_change(name: string) {
-        this.select(name);
+    screen_change(name: string, options: AnyObject = {}) {
+        this.select(name, options);
     }
 
-    select(key: string) {
-        let screen: Screen = this.loadScreen(key);
+    select(key: string, options: AnyObject = {}) {
+        let screen: Screen = this.loadScreen(key, options);
         screen.show();
     }
 
