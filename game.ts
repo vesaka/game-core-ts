@@ -18,7 +18,7 @@ abstract class Game extends Container {
         window.addEventListener('resize', this.onResize.bind(this));
 
         this.createApplication()
-            .createProviders()
+            .createSystems()
             .createWorld()
             .createUi()
             .createI18n()
@@ -35,7 +35,7 @@ abstract class Game extends Container {
 
     abstract createApplication(): this;
 
-    abstract createProviders(): this;
+    abstract createSystems(): this;
 
     abstract createWorld(): this;
 
