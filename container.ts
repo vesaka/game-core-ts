@@ -10,10 +10,12 @@ class Container<T = GameOptions> {
 
     container?: HTMLElement;
 
+    __events: EventsList<number> = {};
+
     static options?: GameOptions;
 
     static layers?: any[];
-    
+
     [key: string]: Function | any;
 
     constructor(options?: T, toPrototype: boolean = true) {
@@ -25,10 +27,10 @@ class Container<T = GameOptions> {
 
 
         this.addMixins();
-        
+
     }
 
-    addMixins(mixins: Mixin[]|undefined = this.mixins) {
+    addMixins(mixins: Mixin[] | undefined = this.mixins) {
         if (!Array.isArray(mixins)) {
             return;
         }
@@ -95,19 +97,23 @@ class Container<T = GameOptions> {
                 let method = `${name}_${events[name][i]}`;
                 if (typeof this[method] === 'function') {
                     this.$on(method, this[method].bind(this));
+                    this.__events[method] = Action.length(method);
                 }
             }
         }
     }
 
+    $mute() {
+        for (let eventName in this.__events) {
+            Action.splice(eventName, this.__events[eventName], 1);
+        }
+    }
+
     $set(name: string, value: any, overwrite: boolean = false) {
         if (!overwrite && Container.prototype[name]) {
-            return
+            return;
         }
-    
         Container.prototype[name] = value;
-        
-        
     }
 }
 
