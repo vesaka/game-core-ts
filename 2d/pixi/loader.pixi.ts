@@ -1,4 +1,4 @@
-import { Assets, ArrayOr, AssetInitOptions, ProgressCallback,AssetsBundle } from 'pixi.js';
+import { Assets, ArrayOr, AssetInitOptions, ProgressCallback } from 'pixi.js';
 import Container from '@/core/container';
 
 class Loader extends Container {
@@ -35,6 +35,15 @@ class Loader extends Container {
         this.$emitAndStop('game_loaded');
     }
 
+    loadFile(url: string | string[]) {
+        return Assets.load(url);
+    }
+
+    loadFiles(urls: string[]) {
+
+        return Assets.load(urls);
+    }
+
     add(url: string) {
         return Assets.add(url);
     }
@@ -58,7 +67,11 @@ class Loader extends Container {
 
     }
 
-    async backgroundLoadBundle(name: string) {
+    backgroundLoad(urls: string | string[]) {
+        return Assets.backgroundLoad(urls);
+    }
+
+    async backgroundLoadBundle() {
         
     }
 
