@@ -9,7 +9,9 @@ class ScreensCollection extends Collection {
 
         this.$listen({
             game: ['loading', 'loaded'],
-            screen: ['select', 'change']
+            screen: ['select', 'change'],
+            scene: ['update'],
+            move: ['next', 'back']
         })
 
     }
@@ -50,6 +52,7 @@ class ScreensCollection extends Collection {
         let screen: Screen = this.loadScreen(key, options);
         screen.show();
     }
+
 
 }
 
