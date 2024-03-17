@@ -11,6 +11,7 @@ declare type StringOr<T> = T | string;
 declare type NumberOr<T> = T | number;
 declare type ObjectOr<T> = T | Object;
 declare type BooleanOr<T> = T | boolean;
+declare type ObjectWith<T> = {[key: string]: T;}
 
 declare type CallbackFunction<T> = (event: T) => unknown;
 
@@ -78,11 +79,6 @@ declare type ModelOptions = {
     [key: string]: any;
 } & UiOptions;
 
-// declare type UiOptions = {
-//     style?: any;
-//     position?: Vector2D;
-//     [key: string]: any;
-// }
 
 declare type ClassList = {
     [key: string]: boolean;
@@ -169,69 +165,6 @@ declare type CollectionOptions<T = KeyAttributeConfig<AnyObject>, K = CatalogueL
 
 declare type LogicalOperator = '&' | '|' | '||' | '&&' | '==' | '!=' | '===' | '!==' | '<' | '>' | '<=' | '>=' | 'in' | 'not in';
 declare type MathOperator = '+' | '-' | '*' | '/' | '%';
-
-declare type Requirement<T = string, K = number> = [T, LogicalOperator, K];
-declare type ImpactCommand = string;
-declare type Choice = {
-    text: string;
-    requirements: Requirement<string, number>[] | string;
-    impact?: ImpactCommand[];
-    action?: string;
-}
-
-declare type OptionalText = {
-    seen?: boolean;
-    enabled?: boolean;
-    requirements?: Requirement<string, number>[];
-    content: Content
-}
-
-declare type WithText = {
-    text: string;
-}
-
-declare type WithBackground = {
-    background: string;
-} & WithText;
-
-declare type WithChoices = {
-    choices: Array<Choice>;
-} & WithText;
-
-declare type WithChoices = {
-    choices: Array<Choice>;
-} & WithText;
-
-declare type WithRequirements = {
-    requirements: Requirement<string, number>[];
-} & WithText;
-
-declare type ContentEntry = {
-    text: string;
-    background: string;
-    choices: Array<Choice>;
-    requirements: Requirement<string, number>[];
-    seen: boolean;
-};
-
-declare type ContentWith<K extends ValueOf<ContentAttributes>, V> = {
-    [key: K]: V;
-    text: string;
-}
-
-const ContentAttributes = ['choices', 'requirements', 'background'];
-
-declare type Content = Array<string | ContentEntry>;
-
-declare type InteractiveScene<T = string> = {
-    background: string;
-    type: T = 'narrator',
-    seen?: boolean = false;
-    character: string = 'narrator';
-    content: Content;
-    requirements?: Requirement<string, number>[];
-    next: string;
-}
 
 declare type ActionsList = {
     [key: string]: string[];

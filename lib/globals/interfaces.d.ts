@@ -35,6 +35,11 @@ declare interface Model3DInterface extends ModelInterface {
 
 }
 
+declare interface SystemInterface {
+    setup(): void;
+    boot(): void;
+}
+
 declare interface CollectionInterface<T> {
     all(): T[];
     count(condition?: ArrayFilterCallback): number;
