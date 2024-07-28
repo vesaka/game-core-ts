@@ -21,3 +21,7 @@ export const snakeCase = (str: string): string => {
 export const pascalCase = (str: string): string => {
     return str.replace(/(\w)(\w*)/g, (_, g1, g2) => g1.toUpperCase() + g2.toLowerCase());
 };
+
+export const ucfirst = (str: string): string => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
