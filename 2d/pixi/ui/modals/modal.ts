@@ -96,7 +96,6 @@ class Modal<H = string, B = string, O = string, C = string, X = string> extends 
         if (buttons) {
             const buttonList = this.createButtons(buttons, options);
             for (let type in buttonList) {
-                console.log('type', buttonList[type].view);
                 box.addChild(buttonList[type].view);
             }
             // box.addChild(buttonsComponent.view);

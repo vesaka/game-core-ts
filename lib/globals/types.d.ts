@@ -51,12 +51,10 @@ declare type AuthUser = {
     data?: AnyObject;
 }
 
-declare type CollectionDefTypes = {
-    def: {
-        [key: string]: any;
-    },
+declare type CollectionDefTypes<T extends Object> = {
+    def: T,
     types: {
-        [key: string]: any;
+        [key: string]: T;
     },
 }
 
@@ -188,6 +186,12 @@ declare type UiOptions = {
     padding: NumberOr<Vector2D>;
     align: ValueOf<Alignment>;
 } & PixiGraphicsOptions;
+
+declare type TabsOptions<T> = {
+    tabs: T[];
+    direction: 'horizontal' | 'vertical';
+    active?: number = 0;
+} & UiOptions;
 
 
 declare type PaginationOptions = {

@@ -13,7 +13,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
 
     protected types: { [key: string]: any } = {};
     
-    protected collection: CollectionDefTypes = {
+    protected collection: CollectionDefTypes<AnyObject> = {
         def: {},
         types: {}
     };
@@ -70,7 +70,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
     buildItem(options: any): any {
         const { catalogue } = this;
         const itemClass: any = catalogue[options.key] || catalogue[Object.keys(catalogue)[0]];
-        return new itemClass(options);        
+        return new itemClass(options);     
     }
 
     addItem(options: KeyAttributeConfig): any {

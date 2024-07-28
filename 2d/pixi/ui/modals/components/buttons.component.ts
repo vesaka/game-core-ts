@@ -40,7 +40,6 @@ class ButtonsComponent<B = ModalButton<string>, T = ModelCollection> extends Com
             }
         }
 
-        console.log('totalWidth', totalWidth);
         return this.buttons;
 
     }
