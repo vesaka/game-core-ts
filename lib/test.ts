@@ -1,28 +1,34 @@
 
 export const OPERATOR: {} = {
-    '=': 'eq',
     '!=': 'neq',
-    '>': 'gt',
     '>=': 'gte',
-    '<': 'lt',
+    '>': 'gt',
     '<=': 'lte',
-    'in': 'in',
+    '<': 'lt',
+    '=': 'eq',
     '!in': 'notIn',
-    'like': 'like',
+    'in': 'in',
     '!like': 'notLike',
-    'between': 'between',
+    'like': 'like',
     '!between': 'notBetween',
-    'isNull': 'isNull',
-    '!isNull': 'notNull'
-
-
+    'between': 'between',
+    '!isNull': 'notNull',
+    'isNull': 'isNull'
 } 
 
 class Test {
 
     static compare(value: any, otherValue: any, operator: string = '='): boolean {
-        const param = this.getOperatorValue(operator, otherValue);
-        
+        let param = this.getOperatorValue(operator, otherValue);
+
+        if (!isNaN(value)) {
+            value = Number(value);
+        }
+
+        if (!isNaN(param)) {
+            param = Number(param);
+        }
+
         switch (operator) {
             case '=':
                 return this.eq(value, param);
@@ -73,6 +79,7 @@ class Test {
     }
 
     static neq(value: any, otherValue: any): boolean {
+        console.log(value, otherValue);
         return value !== otherValue;
     }
 
