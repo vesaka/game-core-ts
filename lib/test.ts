@@ -79,7 +79,6 @@ class Test {
     }
 
     static neq(value: any, otherValue: any): boolean {
-        console.log(value, otherValue);
         return value !== otherValue;
     }
 
