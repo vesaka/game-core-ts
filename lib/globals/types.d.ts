@@ -120,14 +120,7 @@ declare type GameOptions = {
         basePath: string;
     },
     store?: {},
-    options: {
-        world: {
-            size: Size2D;
-        },
-        ui: {
-            
-        }
-    };
+    options: {};
     
 }
 
