@@ -32,7 +32,8 @@ declare interface Model2DInterface extends ModelInterface {
 }
 
 declare interface Model3DInterface extends ModelInterface {
-
+    protected model: any;
+    protected body: any;
 }
 
 declare interface SystemInterface {
