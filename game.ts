@@ -1,6 +1,6 @@
 import Container from "./container";
 
-abstract class Game extends Container {
+abstract class Game<T = GameOptions> extends Container<T> {
     
     protected loaded: boolean;
 
