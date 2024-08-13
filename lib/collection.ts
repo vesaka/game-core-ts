@@ -62,7 +62,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             item.key = key;
             items.push(this.buildItem(item));
         } 
-
+        this.items = items;
         return items;
 
     }

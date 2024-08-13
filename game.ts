@@ -14,6 +14,9 @@ abstract class Game<T = GameOptions> extends Container<T> {
         this.container = options.container;
         this.loaded = false;
 
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+        
         window.addEventListener('orientationchange', this.onResize.bind(this));
         window.addEventListener('resize', this.onResize.bind(this));
 
@@ -28,8 +31,6 @@ abstract class Game<T = GameOptions> extends Container<T> {
         this.$listen({
             'game': ['loaded', 'ready', 'destroy']
         })
-
-        this.$emit('game_ready', this);
 
     }
 
@@ -63,6 +64,10 @@ abstract class Game<T = GameOptions> extends Container<T> {
 
     protected onResize(): void {
         this.$emit('window_resize', this);
+    }
+
+    async build() {
+        
     }
 
 }

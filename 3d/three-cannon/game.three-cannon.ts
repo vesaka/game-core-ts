@@ -1,10 +1,13 @@
 import Game from '@/core/game';
-import {WebGLRenderer, Scene} from 'three';
-import { Body, Vec3 } from 'cannon-es';
+import {WebGLRenderer, Scene, PerspectiveCamera, Camera } from 'three';
+import { World, NaiveBroadphase, MaterialOptions, ContactMaterial, Solver, GSSolver, SplitSolver, Material, Broadphase } from 'cannon-es';
 import Loader from '@/core/3d/three/loader';
+import Collection from '@/core/lib/collection';
+
 class GameThreeCannon<T = GameOptions> extends Game<T> {
     
     protected loders: ObjectWith<any> = {};
+
     constructor(options: GameOptions) {
         super(options);
         this.$listen({
@@ -12,31 +15,45 @@ class GameThreeCannon<T = GameOptions> extends Game<T> {
             window: ['resize'],
             game: ['init', 'ready', 'destroy', 'start', 'over', 'reset'],
             scene: ['created', 'ready'],
-            renderer: ['created', 'ready'],
-            camera: ['created', 'ready']
+            camera: ['created', 'ready'],
+            collection: ['ready', 'updated', 'deleted'],
         });
-        const {canvas} = this;
         
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
         this.running = true;
-        
-        this.$set('scene', new Scene);
-        this.$emit('scene_created', this.scene);
-        
-        const $renderer = this.options.renderer || {};
-        $renderer.canvas = canvas;
-
         this.animationID = undefined;
-        this.$set('renderer', new WebGLRenderer($renderer));
-        
-        this.$emit('renderer_created', this.renderer);
-        this.$emit('game_init');
-                
+        this.$emit('game_ready');      
     }
 
     createApplication(): this {
-        return this;    
+        const { container } = this;
+        let canvas = container.querySelector('canvas');
+
+        if (!canvas) {
+            canvas = document.createElement('canvas');
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            container.appendChild(canvas);
+        }
+
+        this.$set('world', this.createWorld());
+        this.$set('scene', new Scene);
+
+        const $renderer = this.options.renderer || {};
+        $renderer.canvas = canvas;
+        this.animationID = undefined;
+
+        this.camera = this.createCamera();
+        this.$set('renderer', new WebGLRenderer($renderer), true);
+        this.renderer.setClearColor($renderer.color || 0x000000, $renderer.opacity || 1);
+        return this; 
+    }
+
+    createCamera(): Camera {
+        const { width, height } = this;
+        const { fov, near, far, position } = this.options.camera;
+        this.camera = new PerspectiveCamera(fov, width / height, near, far);
+        this.camera.position.copy(position);
+        return this.camera;
     }
 
     createUi(): this {
@@ -55,8 +72,38 @@ class GameThreeCannon<T = GameOptions> extends Game<T> {
         return this;
     }
 
+    createBroadphase(): Broadphase {
+        return new NaiveBroadphase();
+    }
+
     createWorld(): this {
+        const world = new World();
+        const { gravity } = this.options.world;
+
+        world.gravity.set(
+            gravity.x,
+            gravity.y,
+            gravity.z
+        );
+
+        world.broadphase = this.createBroadphase();
+        world.solver =  this.createSolver();
+        world.addContactMaterial(this.createContactMaterial());
+        this.$set('world', world);
+
         return this;
+    }
+
+    createSolver(): Solver {
+        const solver = new GSSolver();
+        solver.iterations = 0.7;
+        solver.tolerance = 0.1;
+        return new SplitSolver(solver);
+    }
+
+    createContactMaterial(): ContactMaterial {
+        const material = new Material('default');
+        return new ContactMaterial(material, material, this.options.physics);
     }
 
     loadAssets(): Promise<any> {
@@ -89,7 +136,7 @@ class GameThreeCannon<T = GameOptions> extends Game<T> {
             cancelAnimationFrame(this.animationID);
             this.animationID = undefined;
         }
-        this.renderer.clear();
+        this.renderer?.clear();
         this.$emit('game_destroy');
         
     }
@@ -103,6 +150,12 @@ class GameThreeCannon<T = GameOptions> extends Game<T> {
     }
     getKeyCharCode(e: KeyboardEvent): number {
         return e.key.charCodeAt(0);
+    }
+
+    collection_ready(collection: Collection) {
+        collection.each((item: Model3DInterface) => {
+            this.add(item);
+        });
     }
     
 };
