@@ -17,6 +17,12 @@ class TabsComponent<T = TabComponent> extends Component<T> {
     setup() {
 
     }
+
+    createButtons() {
+
+    }
+
+    createTabs() {}
 }
 
 export default TabsComponent;
