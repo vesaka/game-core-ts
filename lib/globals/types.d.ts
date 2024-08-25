@@ -32,6 +32,8 @@ declare type OldYear = `${zeroToNine}${zeroToNine}${zeroToNine}${zeroToNine}`;
 declare type NewYear = `${oneToNine}${zeroToNine}${zeroToNine}${zeroToNine}`;
 
 declare type Alignment = ['left', 'right', 'center', 'justify', 'initial', 'inherit'];
+declare type Placement = ['top', 'bottom', 'left', 'right', 'center'];
+declare type Placement2D = ValueOf<Placement> | `${ValueOf<Placement>}-${ValueOf<Placement> | 'center'}`;
 
 declare type MapFunction<T> = (item: T, index: number, array: Array<T>) => T;
 
@@ -183,7 +185,18 @@ declare type UiOptions = {
 declare type TabsOptions<T> = {
     tabs: T[];
     direction: 'horizontal' | 'vertical';
+    placement: Placement2D;
     active?: number = 0;
+} & UiOptions;
+
+declare type TabButtonOptions = {
+    title: string;
+    index: number;
+} & UiOptions;
+
+declare type ComponentsOptions<T = UiOptions> = {
+    type: string;
+    components: ObjectWith<T>;
 } & UiOptions;
 
 
