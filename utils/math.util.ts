@@ -126,6 +126,21 @@ export const fitRatio = (width: number, height: number, maxWidth: number, maxHei
     return Math.min(1, Math.min(width / maxWidth, height / maxHeight));
 }
 
+export const coverRatio = (width: number, height: number, maxWidth: number, maxHeight: number): number => {
+        
+    if (width > maxWidth) {
+        height = height * (maxWidth / width);
+        width = maxWidth;
+    }
+    
+    if (height > maxHeight) {
+        width = width * (maxHeight / height);
+        height = maxHeight;
+    }
+
+    return Math.max(1, Math.max(width / maxWidth, height / maxHeight));
+}
+
 export const fitSize = (srcWidth: number, srcHeight: number, maxWidth: number, maxHeight: number) => {
     const ratio = Math.min(maxWidth / srcWidth, maxHeight / srcHeight);
 
