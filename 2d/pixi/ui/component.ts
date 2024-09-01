@@ -12,10 +12,14 @@ class Component<T = UiOptions, G = Graphics> extends UI<T, G> {
 
     createView(): G {
         const view = new Graphics();
-        view.beginFill(this.fill, this.alpha);
+        view.beginFill(this.fill, this.alpha || 0.1);
         view.drawRect(0, 0, this.size?.width, this.size?.height);
         view.endFill();
         return view as G;
+    }
+
+    setSize(size: Size2D) {
+        this.size = size;
     }
 
     update() {
