@@ -2,11 +2,11 @@ import Component from "@/core/2d/pixi/ui/component";
 import TabComponent from "./tab.component";
 import Button from "@/core/2d/pixi/ui/buttons/button";
 import { extend } from "@/core/utils/object.util";
-import { Graphics, Text } from "pixi.js";
+import { Graphics } from "pixi.js";
 
-abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> extends Component<T> {
+abstract class TabsComponent<T extends UiOptions = UiOptions, C extends TabComponent = TabComponent> extends Component<T> {
     
-    protected tabs: T[] = [];
+    protected panels: C[] = [];
 
     protected activeTabId: number = 0;
 
@@ -16,21 +16,18 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
 
     constructor(options: T) {
         super(options);
+        this.$listen({
+            scene: ['change'],
+            game: ['load']
+        })
         this.panel = new Graphics();
         this.header = new Graphics();
         this.view.addChild(this.header, this.panel);
         
         if (this.types && Object.values(this.types).length) {
             this.buttons = this.createButtons();
-            // console.log(this.constructor.name);
             this.setup();
         }
-    }
-
-    get catalogue(): ObjectWith<any> {
-        return {
-            component: Component
-        };
     }
 
     setActiveTab(tabId: number) {
@@ -43,16 +40,19 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
         })
         this.oldTabId = this.activeTabId;
         this.activeTabId = tabId;
-        this.activeTab = this.tabs[tabId];
         this.showPanel(tabId);
         this.$emit('tab_change', this);
     }
 
+    get activeTab(): T {
+        return this.tabs[this.activeTabId];
+    }
 
     createView(): Graphics {
         const view = new Graphics();
-        view.width = this.size.width;
-        view.height = this.size.height;
+        view.beginFill(0x000000, 0.01);
+        view.drawRect(0, 0, this.size.width, this.size.height);
+        view.endFill();
         return view;
     }
 
@@ -61,7 +61,6 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
         this.def = options.def;
         this.types = options.types;
         this.buttons = this.createButtons();
-        
         this.setup();
     }
 
@@ -128,19 +127,19 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
         return button as B;
     }
 
-    createPanels() {
+    createPanels(): C[] {
         const { types } = this;
         let index = 0;
         const panels = [];
         for (const type in types) {
-            const options = extend(this.def, types[type] || {}) as T;
+            const options = extend(this.def, types[type] || {}) as any;
             options.key = type;
             options.size = {
                 width: this.panel.width,
                 height: this.panel.height
             }
-            const panel = this.createPanel(options) as TabComponent;
-            panel.index = index;
+            options.index = index;
+            const panel = this.createPanel(options) as C;
             this.panel.addChild(panel.view);
             panels.push(panel);
             index++;
@@ -154,12 +153,13 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
     }
 
     showPanel(panelId: number) {
-        this.panels.forEach((panel: TabComponent, index: number) => {
+        this.panels.forEach((panel: C, index: number) => {
             panel.view.visible = index === panelId;
             if (index === panelId) {
                 panel.active = true;
-                panel.build();
-                const content = this.buildPanel(panel.key) as Component;
+                
+                const content = this.buildPanel(panel.key, panel.size) as Component;
+                content.build();
                 panel.view.addChild(content.view);
                 this.activePanel = panel;
                 
@@ -210,6 +210,10 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
                 dim.x = size.width - header.width;
                 dim.y = size.height - header.height;
                 panel.x = 0;
+                panel.width = size.width - header.width;
+                break;
+            case 'left-top':
+                panel.x = header.width;
                 panel.width = size.width - header.width;
                 break;
             case 'left-bottom': 
@@ -269,9 +273,11 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C = Component> ext
 
     }
 
-    buildPanel(key: string): C {
-        return new Component({ key }) as C;
+    buildPanel(key: string, size: Size2D): C {
+        return new Component({ key, size }) as C;
     }
+
+
 }
 
 export default TabsComponent;
