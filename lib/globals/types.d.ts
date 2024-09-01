@@ -147,7 +147,7 @@ declare type KeyAttributeConfig<T = AnyObject> = {
 }
 
 declare type CatalogueList<T> = {
-    [key: string]: T;
+    [key: string]: typeof T;
 }
 
 declare type CollectionOptions<T = KeyAttributeConfig<AnyObject>, K = CatalogueList<AnyObject>> = {
@@ -189,6 +189,10 @@ declare type TabsOptions<T> = {
     active?: number = 0;
 } & UiOptions;
 
+declare type SliderOptions = {
+    limit: number;
+} & TabsOptions;
+
 declare type TabButtonOptions = {
     title: string;
     index: number;
@@ -198,7 +202,6 @@ declare type ComponentsOptions<T = UiOptions> = {
     type: string;
     components: ObjectWith<T>;
 } & UiOptions;
-
 
 declare type PaginationOptions = {
     page: number;
@@ -212,13 +215,36 @@ declare type PaginationOptions = {
 declare type GridOptions = {
     rows: number;
     columns: number;
-    offset: number;
-    slotSize: Size2D;
-} & UiOptions;
+    offset?: NumberOr<Vector2D>;
+    size: Size2D;
+};
 
 declare type SlotOptions = {
     index: number;
 } & UiOptions;
+
+declare type Slot = {
+    x: number;
+    y: number;
+    ax: number;
+    ay: number;
+    bx: number;
+    by: number;
+    cx: number;
+    cy: number;
+    dx: number;
+    dy: number;
+    width: number;
+    height: number;
+    available: boolean;
+    locked: boolean;
+}
+
+declare type Slots2dMap = {
+    [key: number]: {
+        [key: number]: Slot;
+    };
+}
 
 declare type TextOptions = {
     text: string;
