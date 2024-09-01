@@ -306,14 +306,14 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             path: this.path
         }, this.options[key] || {}) as UiOptions;
 
-        const Component = this.catalogue[key] || Object.values(this.catalogue)[0] as any;
+        const Component = this.catalogue[key] || Object.values(this.catalogue)[0] as K;
         const newComponent = new Component(setup);
         this.add(newComponent);
         return newComponent;
     }
 
     destroy(...names: string[]): void {
-        console.log('destroy', names);
+        names;
     }
 }
 ;
