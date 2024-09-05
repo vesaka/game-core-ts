@@ -303,8 +303,9 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             key: key,
             size: { width: 1, height: 1 },
             position: { x: 0, y: 0 },
-            path: this.path
-        }, this.options[key] || {}) as UiOptions;
+            path: this.path,
+            bounds: this.def.bounds
+        }, this.types[key] || {}) as UiOptions;
 
         const Component = this.catalogue[key] || Object.values(this.catalogue)[0] as K;
         const newComponent = new Component(setup);
@@ -314,6 +315,28 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
 
     destroy(...names: string[]): void {
         names;
+    }
+
+    where(where: AnyObject | Function | string, value: StringOr<Number>): T | null {
+        if (typeof where === 'string' && value) {
+            return this.find((item: any) => item[where] === value);
+        }
+        if (typeof where === 'function') {
+            return this.find(where);
+        }
+
+        if (typeof where === 'object' && null !== where) {
+            return this.find((item: any) => {
+                for (let key in where) {
+                    if (item[key] !== where[key]) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+
+        return null;
     }
 }
 ;

@@ -34,7 +34,9 @@ declare type NewYear = `${oneToNine}${zeroToNine}${zeroToNine}${zeroToNine}`;
 declare type Alignment = ['left', 'right', 'center', 'justify', 'initial', 'inherit'];
 declare type Placement = ['top', 'bottom', 'left', 'right', 'center'];
 declare type Placement2D = ValueOf<Placement> | `${ValueOf<Placement>}-${ValueOf<Placement> | 'center'}`;
-
+declare type ScrollBarPlacement = ['top', 'bottom', 'left', 'right'];
+declare type EdgeVerticalPlacement = 'top' | 'bottom';
+declare type EdgeHorizontalPlacement = 'left' | 'right';
 declare type MapFunction<T> = (item: T, index: number, array: Array<T>) => T;
 
 declare type ConnectOptions = {
@@ -175,6 +177,7 @@ declare type UiOptions = {
     key: string;
     position: Vector2D;
     size: Size2D;
+    bounds?: Size2D;
     rotation: Vector2D;
     offset: Vector2D;
     margin: NumberOr<Vector2D>;
@@ -239,6 +242,16 @@ declare type Slot = {
     available: boolean;
     locked: boolean;
 }
+
+declare type ScrollerOptions = {
+    thumb?: AnyObject;
+    track?: AnyObject;
+    arrows?: AnyObject;
+    volume?: number;
+    vertical?: boolean | ValueOf<EdgeVerticalPlacement>,
+    horizontal?: boolean | ValueOf<EdgeHorizontalPlacement>,
+
+} & UiOptions;
 
 declare type Slots2dMap = {
     [key: number]: {
