@@ -7,7 +7,6 @@ class Component<T = UiOptions, G = Graphics> extends UI<T, G> {
     
     constructor(options: T, bounds?: Size2D) {
         super(options, bounds);
-        
     }
 
     createView(): G {
@@ -28,6 +27,10 @@ class Component<T = UiOptions, G = Graphics> extends UI<T, G> {
 
     build() {
         
+    }
+
+    get active(): boolean {
+        return true;
     }
     
 }

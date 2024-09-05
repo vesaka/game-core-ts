@@ -21,7 +21,9 @@ class UI<T = UiOptions, K = Graphics> extends Container<AnyObject>{
 
     constructor(options: T, bounds?: Size2D) {
         super();
-        this.bounds = bounds;
+        if (bounds || (options as UiOptions).bounds) {
+            this.bounds = bounds;
+        }
         this.name = snakeCase(this.constructor.name);
         this.applyFilters(options);
         this.view = this.createView();

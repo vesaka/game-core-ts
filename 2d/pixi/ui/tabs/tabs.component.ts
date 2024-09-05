@@ -4,7 +4,7 @@ import Button from "@/core/2d/pixi/ui/buttons/button";
 import { extend } from "@/core/utils/object.util";
 import { Graphics } from "pixi.js";
 
-abstract class TabsComponent<T extends UiOptions = UiOptions, C extends TabComponent = TabComponent> extends Component<T> {
+abstract class TabsComponent<T extends UiOptions = UiOptions, C extends Component = TabComponent> extends Component<T> {
     
     protected panels: C[] = [];
 
@@ -149,15 +149,14 @@ abstract class TabsComponent<T extends UiOptions = UiOptions, C extends TabCompo
     }
 
     createPanel(options: T): C {
-        return new TabComponent(options) as C;
+        return new TabComponent(options) as any;
     }
 
     showPanel(panelId: number) {
-        this.panels.forEach((panel: C, index: number) => {
+        this.panels.forEach((panel: any, index: number) => {
             panel.view.visible = index === panelId;
             if (index === panelId) {
                 panel.active = true;
-                
                 const content = this.buildPanel(panel.key, panel.size) as Component;
                 content.build();
                 panel.view.addChild(content.view);
