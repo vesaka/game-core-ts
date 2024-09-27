@@ -1,5 +1,5 @@
 import Container from '@/core/container';
-import { extend, raw } from '@/core/utils/object.util';
+import { extend } from '@/core/utils/object.util';
 
 class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implements CollectionInterface<T> {
 
@@ -74,7 +74,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
     }
 
     addItem(options: KeyAttributeConfig): any {
-        const item = this.buildItem(extend(this.def, raw(options)));
+        const item = this.buildItem(extend(this.def, options));
         this.items.push(item);
         return item;
     }
@@ -116,12 +116,40 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
         this.items.splice(at, 1);
         return this;
     }
+
+    delete(item: Function | T) {
+        if (typeof item === 'function') {
+            this.items = this.items.filter(item as any)
+            return this;
+        }
+        const index = this.items.indexOf(item);
+        if (index > -1) {
+            this.items.splice(index, 1);
+        }
+        return this;
+    }
     
     find(condition: Function): any {
         return this.first(condition);
     }
 
-    first(condition: Function): any {
+    collect(items?: Array<T>): Collection<T> {
+        if (items === undefined) {
+            items = this.items;
+        }
+        const constructor: any = this.constructor;
+        const collection = new constructor({
+            def: this.def,
+            types: this.types,
+        });
+        collection.setup(items.map((item: T) => this.buildItem(item)));
+        return collection;
+    }
+
+    first(condition?: Function): any {
+        if (!condition) {
+            return this.items[0] || null;
+        }
         for (let i in this.items) {
             const stop = condition(this.items[i], i);
             if (true === stop) {
@@ -131,12 +159,13 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
         return null;
     }
 
-    map(callback: Function): any[] {
+    map(callback: Function): Collection<T> {
         const result = [];
         for (let i in this.items) {
             result.push(callback(this.items[i], i));
         }
-        return result;
+
+        return this.collect(result);
     }
 
     each(callback: Function): this {
@@ -170,7 +199,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             };
         }
 
-        return new Collection(this.items.filter(condition));
+        return this.collect(this.items.filter(condition));
     }
 
     merge() {
