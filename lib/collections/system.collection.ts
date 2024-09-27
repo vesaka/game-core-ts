@@ -3,7 +3,7 @@ import Collection from "@/core/lib/collection";
 class SystemCollection extends Collection {
 
 
-    create() {
+    async create() {
         for (let key in this.catalogue) {
             const classType = this.catalogue[key] as any;
             const provider = new classType() as SystemInterface;
@@ -13,8 +13,10 @@ class SystemCollection extends Collection {
             this.$set(key, provider);
         }
 
-        this.each((provider: SystemInterface) => {
+        return Promise.resolve(this.each(async (provider: SystemInterface) => {
             provider.boot();
+        })).catch((err) => {
+            console.error(err);
         })
     }
 
