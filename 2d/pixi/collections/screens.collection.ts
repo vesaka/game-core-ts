@@ -8,7 +8,7 @@ class ScreensCollection extends Collection {
         super(options);
 
         this.$listen({
-            game: ['loading', 'loaded'],
+            game: ['loading', 'loaded', 'ready'],
             screen: ['select', 'change'],
             scene: ['update'],
             move: ['next', 'back']

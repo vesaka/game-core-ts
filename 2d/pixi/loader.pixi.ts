@@ -32,6 +32,7 @@ class Loader extends Container {
             Assets.backgroundLoadBundle(bundle.name);
         }
 
+        this.$set('_loaderReady', true);
         this.$emitAndStop('game_loaded');
     }
 
