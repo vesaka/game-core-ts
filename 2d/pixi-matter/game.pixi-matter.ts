@@ -52,7 +52,7 @@ class GamePixiMatter extends Game2D {
         await this.loader.load()
     }
 
-    createProviders(): this {
+    createSystems(): this {
         return this;
     }
     
