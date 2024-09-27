@@ -17,6 +17,10 @@ class Component<T = UiOptions, G = Graphics> extends UI<T, G> {
         return view as G;
     }
 
+    set(key: string, value: any) {
+        this[key] = value;
+    }
+
     setSize(size: Size2D) {
         this.size = size;
     }
