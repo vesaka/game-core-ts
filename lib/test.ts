@@ -7,13 +7,13 @@ export const OPERATOR: {} = {
     '<': 'lt',
     '=': 'eq',
     '!in': 'notIn',
-    'in': 'in',
+    '#in': 'in',
     '!like': 'notLike',
-    'like': 'like',
+    '#like': 'like',
     '!between': 'notBetween',
-    'between': 'between',
+    '#between': 'between',
     '!isNull': 'notNull',
-    'isNull': 'isNull'
+    '#isNull': 'isNull'
 } 
 
 class Test {
