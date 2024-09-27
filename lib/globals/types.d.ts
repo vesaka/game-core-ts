@@ -35,6 +35,7 @@ declare type Alignment = ['left', 'right', 'center', 'justify', 'initial', 'inhe
 declare type Placement = ['top', 'bottom', 'left', 'right', 'center'];
 declare type Placement2D = ValueOf<Placement> | `${ValueOf<Placement>}-${ValueOf<Placement> | 'center'}`;
 declare type ScrollBarPlacement = ['top', 'bottom', 'left', 'right'];
+declare type Direction = ['up', 'down', 'left', 'right'];
 declare type EdgeVerticalPlacement = 'top' | 'bottom';
 declare type EdgeHorizontalPlacement = 'left' | 'right';
 declare type MapFunction<T> = (item: T, index: number, array: Array<T>) => T;
@@ -309,4 +310,20 @@ declare type ModalConfirmTexts = {
 
 declare type TransitionalProps = {
     [key: string]: [number, number];
+}
+
+declare interface WithSingleStatus<T> {
+    status: ValueOf<T>;
+    is(status: ValueOf<T>): boolean;
+    isNot(status: ValueOf<T>): boolean;
+    setStatus(status: ValueOf<T>): void;
+    clearStatus(): void;
+}
+
+declare interface WithManyStatuses<T> {
+    status: ValueOf<T>[];
+    is(status: ValueOf<T>): boolean;
+    isNot(status: ValueOf<T>): boolean;
+    setStatus(status: ValueOf<T>): void;
+    clearStatus(): void;
 }
