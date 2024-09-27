@@ -1,7 +1,7 @@
 import Container from "@/core/container";
 import { snakeCase } from "@/core/utils/string.util";
 import { hex2base } from "@/core/utils/colors.util";
-import { Graphics, LineStyle } from "pixi.js";
+import { Graphics, LineStyle, Container as PixiContainer } from "pixi.js";
 
 class UI<T = UiOptions, K = Graphics> extends Container<AnyObject>{
     
@@ -28,6 +28,18 @@ class UI<T = UiOptions, K = Graphics> extends Container<AnyObject>{
         this.applyFilters(options);
         this.view = this.createView();
         
+    }
+
+    createLayers(...names: string[]) {
+        if (!this.layers) {
+            this.layers = {};
+        }
+
+        names.forEach(name => {   
+            const layer = new PixiContainer();
+            (this.view as PixiContainer).addChild(layer);
+            this.layers[name] = layer;
+        });
     }
 
     createView(): K {
