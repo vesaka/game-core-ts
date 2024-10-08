@@ -31,8 +31,9 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             this.items = options;
         } else if (options) {
             this.name = options.key;
-            this.items = Array.isArray(options.items) ? options.items : [];
-
+            if (Array.isArray(options.items)) {
+                this.items = options.items;
+            }
             if (options.def) {
                 this.def = options.def;
             }
@@ -166,6 +167,11 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
         }
 
         return this.collect(result);
+    }
+
+    transform(callback: (value: T, index: number, array: T[]) => T): this {
+        this.items = this.items.map((value, index, array) => callback(value, index, array));
+        return this;
     }
 
     each(callback: Function): this {
