@@ -12,7 +12,7 @@ declare type NumberOr<T> = T | number;
 declare type ObjectOr<T> = T | Object;
 declare type BooleanOr<T> = T | boolean;
 declare type ObjectWith<T> = {[key: string]: T;}
-
+declare type KeyValuePair<V = any> = {key: string, value: V};
 declare type CallbackFunction<T> = (event: T) => unknown;
 
 type emptyOrOne = '' | 1;
@@ -45,8 +45,8 @@ declare type ConnectOptions = {
     headers?: RequestHeaders;
     params?: RequestParams;
 };
-declare type AnyObject = {
-    [key: string | number]: any
+declare type AnyObject<V = any> = {
+    [key: string | number]: V
 }
 
 declare type AuthUser = {
@@ -151,6 +151,10 @@ declare type KeyAttributeConfig<T = AnyObject> = {
 
 declare type CatalogueList<T> = {
     [key: string]: typeof T;
+}
+
+declare interface HasCatalogue<T> {
+    protected catalogue: CatalogueList<T>;
 }
 
 declare type CollectionOptions<T = KeyAttributeConfig<AnyObject>, K = CatalogueList<AnyObject>> = {
