@@ -16,6 +16,8 @@ class Container<T = GameOptions> {
 
     static layers?: any[];
 
+    private static prototypeKeys: string[] = [];
+
     [key: string]: Function | any;
 
     constructor(options?: T, toPrototype: boolean = true) {
@@ -114,6 +116,14 @@ class Container<T = GameOptions> {
             return;
         }
         Container.prototype[name] = value;
+        Container.prototypeKeys.push(name);
+    }
+
+    static clearPrototype() {
+        for (let key of Container.prototypeKeys) {
+            delete Container.prototype[key];
+        }
+        Container.prototypeKeys = [];
     }
 }
 
