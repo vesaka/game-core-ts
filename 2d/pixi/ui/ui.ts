@@ -157,6 +157,11 @@ class UI<T = UiOptions, K = Graphics> extends Container<AnyObject>{
     translate<R = string>(key: string, def: string = ''): R {
         return this.i18n.get(key, def);
     }
+
+    destroy() {
+        (this.view as Graphics).removeChildren();
+        this.$mute();
+    }
 }
 
 export default UI;
