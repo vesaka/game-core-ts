@@ -35,6 +35,21 @@ export const extend = (target: AnyObject, source: AnyObject): Object => {
     return target;
 };
 
+export const sameArray = (a: Array<any> | undefined, b: Array<any> | undefined, def: boolean = false) => {
+    if (!a || !b) {
+        return def;
+    }
+    return a.length === b.length && a.every((val) => b.includes(val));
+};
+
+export const uniqueArray = (array: Array<any>) => {
+    return array.filter((value, index, self) => self.indexOf(value) === index);
+}
+
+export const arrayUnique = (array: Array<any>) => {
+    return [...new Set(array)];
+}
+
 export const deepGet = (obj: AnyObject | any, path: string, defaultValue: any = null) => {
     let i, key, keys = path.split('.');
     for (i = 0; i < keys.length; i++) {
