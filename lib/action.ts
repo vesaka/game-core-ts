@@ -25,7 +25,8 @@ class Action {
     }
 
     static length(tag: string): number {
-        return Action.map.get(tag)?.length as number;
+        const map = Action.map.get(tag);
+        return map ? map.length : 0;
     }
 
     static splice(tag: string, index: number, count: number): void {
