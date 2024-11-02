@@ -12,6 +12,9 @@ declare type NumberOr<T> = T | number;
 declare type ObjectOr<T> = T | Object;
 declare type BooleanOr<T> = T | boolean;
 declare type ObjectWith<T> = {[key: string]: T;}
+declare type ObjectPair<K, V> = {[key: K]: V};
+declare type ObjectEnum<V extends Object> = {[key: keyof V]: ValueOf<V>};
+declare type MapWith<T> = {[key: string]: new (params: string[]) => T;}
 declare type KeyValuePair<V = any> = {key: string, value: V};
 declare type CallbackFunction<T> = (event: T) => unknown;
 
