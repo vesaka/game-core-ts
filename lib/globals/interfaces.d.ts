@@ -44,7 +44,7 @@ declare interface SystemInterface {
 declare interface CollectionInterface<T> {
     all(): T[];
     count(condition?: ArrayFilterCallback): number;
-    avarage(key: string | number): number;
+    average(key: string | number): number;
     avg(key: string | number): number;
     add(item: any): this;
     get(key: number): T;
