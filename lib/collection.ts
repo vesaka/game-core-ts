@@ -92,12 +92,12 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
         return this.items.length;
     }
 
-    avarage(key: string | number): number {
+    average(key: string | number): number {
         return this.items.reduce((a: any, b: any) => a + b[key], 0) / this.items.length;
     }
 
     avg(key: string | number): number {
-        return this.avarage(key);
+        return this.average(key);
     }
 
     add(item: any) {
@@ -316,7 +316,8 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
     }
 
     slice(start = 0, end = 0) {
-        return new Collection(this.items.slice(start, end));
+        const constructor = Object.getPrototypeOf(this).constructor;
+        return new constructor(this.items.slice(start, end));
     }
 
     clear() {
