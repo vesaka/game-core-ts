@@ -16,7 +16,7 @@ class ModalButton<S extends string> extends Button<S> {
         return view;
     }
 
-    put(content: S): void {
+    put<C extends string>(content: C | S): void {
         this.view.removeChildren();
         const text = new Text(this.t(`app.${content}`, content), this.style);
         this.view.addChild(text);

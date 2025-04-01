@@ -1,5 +1,4 @@
 import UI from "@/core/2d/pixi/ui/ui";
-import { extend } from "@/core/utils/object.util";
 import { Graphics, Text } from "pixi.js";
 class Button<C = string, U = UiOptions> extends UI<U> {
 

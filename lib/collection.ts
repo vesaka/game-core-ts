@@ -71,7 +71,7 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
     buildItem(options: any): any {
         const { catalogue } = this;
         const itemClass: any = catalogue[options.key] || catalogue[Object.keys(catalogue)[0]];
-        return new itemClass(options);     
+        return new itemClass(options);  
     }
 
     addItem(options: KeyAttributeConfig): any {
@@ -158,6 +158,19 @@ class Collection<T = KeyAttributeConfig, K = AnyObject> extends Container implem
             }
         }
         return null;
+    }
+
+    last(condition?: Function): any {
+        if (!condition) {
+            return this.items[this.items.length - 1] || null;
+        }
+        for (let i = this.items.length - 1; i >= 0; i--) {
+            const stop = condition(this.items[i], i);
+            if (true === stop) {
+                return this.items[i];
+            }
+        }
+        return null
     }
 
     map(callback: Function): Collection<T> {

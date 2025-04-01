@@ -193,6 +193,14 @@ declare type UiOptions = {
     align: ValueOf<Alignment>;
 } & PixiGraphicsOptions;
 
+declare type SlotButtonOptions = {
+    position: Vector2D;
+    size: Size2D;
+    name: string;
+    title: string;
+    index: number;
+} & UiOptions;
+
 declare type TabsOptions<T> = {
     tabs: T[];
     direction: 'horizontal' | 'vertical';

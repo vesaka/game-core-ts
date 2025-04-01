@@ -1,6 +1,6 @@
 import UI from "@/core/2d/pixi/ui/ui";
 
-import { Graphics, FederatedPointerEvent} from "pixi.js";
+import { Graphics, Text, FederatedPointerEvent} from "pixi.js";
 import ModalTransition from "@/core/lib/transitions/gsap/modal.transition";
 import CircleButton from "@/core/2d/pixi/ui/buttons/circle.button";
 import ModalButton from "@/core/2d/pixi/ui/buttons/modal.button";
@@ -89,7 +89,8 @@ class Modal<H = string, B = string, O = string, C = string, X = string> extends 
         }
 
         if (body) {
-            body.updateText(options.body);
+            // body.updateText(options.body);
+            body.view.addChild(this.createText(options.body as string));
             box.addChild(body.view);
         }
 
@@ -175,6 +176,18 @@ class Modal<H = string, B = string, O = string, C = string, X = string> extends 
         const dissmiss = new CircleButton<string>(options, this.size);
         dissmiss.put('X');
         return dissmiss;
+    }
+
+    createText(message: string): Text {
+        const text = new Text(message, {
+            fill: 0x000000,
+            align: 'center',
+            fontSize: 24,
+        });
+
+        // text.pivot.set(text.width * 0.5, text.height * 0.5);
+
+        return text;
     }
 
     
